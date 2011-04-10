@@ -1,0 +1,263 @@
+package dungeon;
+
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.UIManager;
+
+import dungeon.model.Game;
+import dungeon.model.items.Item;
+import dungeon.model.items.mobs.Movement;
+import dungeon.ui.DungeonForm;
+
+/**
+ * Dungeon game application
+ */
+public class App
+{
+	// These determine how fast the game plays
+	public final static int SPEED_SLOW = 1000;
+	public final static int SPEED_HALF = 200;
+	public final static int SPEED_NORMAL = 100;
+	public final static int SPEED_DOUBLE = 50;
+	public final static int SPEED_FAST = 1;
+	public final static int NOGRAPHICS = 0;
+	public  static int gameSpeed=SPEED_FAST;
+	/**
+	 * Application entry point
+	 * @param args Command-line arguments
+	 */
+	public static void main(String[] args)
+	{
+		try
+		{
+			// Set the native look and feel
+			String look_and_feel = UIManager.getSystemLookAndFeelClassName();
+			UIManager.setLookAndFeel(look_and_feel);
+			
+			// Handle keyboard events
+			KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			kfm.addKeyEventDispatcher(fKeyDispatcher);
+			
+			fGame = DungeonBuilder.createDungeon("Test Dungeon", 0);
+			fTimer = new Timer(gameSpeed, fTimerTick);
+			
+			fMainForm = new DungeonForm();
+			fMainForm.setVisible(true);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @return Returns the current game object
+	 */
+	public static Game getGame()
+	{
+		return fGame;
+	}
+	/**
+	 * Sets the current game object
+	 * @param game The game
+	 */
+	public static void setGame(Game game)
+	{
+		fGame = game;
+	}
+	static Game fGame = null;
+	
+	/**
+	 * @return Returns the game timer
+	 */
+	public static Timer getTimer()
+	{
+		return fTimer;
+	}
+	static Timer fTimer = null;
+	
+	// The application window
+	public static DungeonForm fMainForm = null;
+	
+	public static void changeSpeed(int speed)
+	{
+		boolean running = fTimer.isRunning();
+		
+		if (running)
+			fTimer.stop();
+		
+		fTimer = new Timer(speed, fTimerTick);
+		gameSpeed=speed;
+		
+		if (running)
+			fTimer.start();
+	}
+	
+	public static int getSpeed() {
+		return gameSpeed;
+	}
+	/**
+	 * End the current game
+	 * 
+	 * @param won True if the user won; false otherwise
+	 */
+	public static void finishGame(boolean won)
+	{
+		fMainForm.pauseGame();
+		
+		String msg = null;
+		if (won)
+		{
+			// All your base are belong to us
+			
+			log("\nFINISHED (won)");
+			
+			msg = "You won the game.";
+			msg += "\n";
+			msg += "Well done!";
+		}
+		else
+		{
+			// Sorry Mario, the princess is in another castle
+			
+			log("\nFINISHED (lost)");
+			
+			msg = "You did not win the game.";
+			msg += "\n";
+			msg += "Better luck next time.";
+		}
+		
+		JOptionPane.showMessageDialog(null, msg, "Dungeon", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+ 	/**
+	 * End the current tournament
+	 * 
+	 * @param winner The name of the winning faction
+	 */
+	public static void finishTournament(String winner)
+	{
+		
+		// if we are watching graphics then display end message as normal
+		if (App.getSpeed() != App.NOGRAPHICS) {
+			fMainForm.pauseGame();
+
+			log("\nFINISHED (winner is " + winner + ")");
+			if (App.getSpeed() == App.SPEED_FAST) {
+				System.out.println("The winner is " + winner);
+				App.fMainForm.resetDungeon();
+			}
+
+			// JOptionPane.showMessageDialog(null, "The winner is " + winner,
+			// "Dungeon", JOptionPane.INFORMATION_MESSAGE);
+		} else
+		// else nographics means we are running learning trials, so go straight
+		// into next trial
+		{
+			System.out.println("The winner is " + winner);
+			App.fMainForm.resetDungeon();
+		}
+	}
+	
+	/**
+	 * Send a message to the game log
+	 * 
+	 * @param message The message to be displayed
+	 */
+	public static void log(String message)
+	{
+		fMainForm.log(message);
+	}
+	
+	/**
+	 * Make a link appear briefly between two items on the map
+	 * 
+	 * @param item_a The first item
+	 * @param item_b The second item
+	 */
+	public static void showLink(Item item_a, Item item_b)
+	{
+		fMainForm.showLink(item_a, item_b);
+	}
+
+	/**
+	 * Make the game change the level of the current dungeon map
+	 * 
+	 * @param level_change The number of levels to go down
+	 */
+	public static void changeMapLevel(int level_change)
+	{
+		fMainForm.changeMapLevel(level_change);
+	}
+	
+	/**
+	 * This handles the game play
+	 */
+	static ActionListener fTimerTick = new ActionListener()
+	{
+		boolean fActive = false;
+		
+		public void actionPerformed(ActionEvent evt)
+		{
+			if (fActive)
+				return;
+			
+			fActive = true;
+			
+			// Next round
+			fGame.tick();
+			fMainForm.updateGame();
+			
+			fActive = false;
+		}
+	};
+	
+	/**
+	 * This intercepts arrow-key presses so the user can move the hero around
+	 */
+	static KeyEventDispatcher fKeyDispatcher = new KeyEventDispatcher()
+	{
+		public boolean dispatchKeyEvent(KeyEvent e)
+		{
+			int event_id = e.getID();
+			if ((event_id != KeyEvent.KEY_PRESSED) && (event_id != KeyEvent.KEY_RELEASED))
+				return false;
+			
+			Movement m = fGame.getHero().getMovement();
+			
+			boolean pressed = (event_id == KeyEvent.KEY_PRESSED);
+			boolean handled = false;
+			switch (e.getKeyCode())
+			{
+			case 37:
+				// Left
+				m.Left = pressed;
+				handled = true;
+				break;
+			case 38:
+				// Up
+				m.Up = pressed;
+				handled = true;
+				break;
+			case 39:
+				// Right
+				m.Right = pressed;
+				handled = true;
+				break;
+			case 40:
+				// Down
+				m.Down = pressed;
+				handled = true;
+				break;
+			}
+			
+			return handled;
+		}
+	};
+}

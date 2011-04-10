@@ -1,0 +1,615 @@
+package dungeon.ui;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JToolBar;
+
+import dungeon.App;
+import dungeon.DungeonBuilder;
+import dungeon.ai.*;
+import dungeon.model.Game;
+import dungeon.model.items.Item;
+import dungeon.model.items.mobs.Creature;
+import dungeon.model.items.mobs.Hero;
+import dungeon.model.items.treasure.Treasure;
+import dungeon.model.structure.Floor;
+import dungeon.model.structure.Tile;
+import dungeon.utils.Persistence;
+
+/**
+ * The main dungeon game window
+ */
+public class DungeonForm extends JFrame
+{
+	// Required
+	private static final long serialVersionUID = -6724849240079211199L;
+	
+	// Current directory for open/save
+	File fDirectory = null;
+	
+	// The currently loaded dungeon file
+	String fFileName = null;
+	
+	
+	/**
+	 * Constructor
+	 */
+	public DungeonForm()
+	{
+		fMapPanel = new MapPanel(App.getGame());
+		
+    	fInfo = new InfoPanel();
+    	
+    	fLog = new JTextArea();
+    	fLog.setEditable(false);
+    	fLog.setLineWrap(true);
+    	
+    	JToolBar toolbar = new JToolBar();
+    	toolbar.setFloatable(false);
+    	fNewButton = new JButton("New Dungeon");
+    	fNewButton.addActionListener(fNewDungeon);
+    	toolbar.add(fNewButton);
+    	toolbar.addSeparator();
+    	fRandomiseButton = new JButton("Randomise");
+    	fRandomiseButton.addActionListener(fRandomise);
+    	toolbar.add(fRandomiseButton);
+    	fResetButton = new JButton("Reset Dungeon");
+    	fResetButton.addActionListener(fReset);
+    	toolbar.add(fResetButton);
+    	toolbar.addSeparator();
+    	fOpenButton = new JButton("Open");
+    	fOpenButton.addActionListener(fOpen);
+    	toolbar.add(fOpenButton);
+    	fSaveButton = new JButton("Save");
+    	fSaveButton.addActionListener(fSave);
+    	toolbar.add(fSaveButton);
+    	toolbar.addSeparator();
+    	fSetupButton = new JButton("Change AI");
+    	fSetupButton.addActionListener(fSetup);
+    	toolbar.add(fSetupButton);
+    	fSpeedButton = new JButton("Speed: Fast");
+    	fSpeedButton.addActionListener(fSpeed);
+    	toolbar.add(fSpeedButton);
+    	toolbar.addSeparator();
+    	fStartButton = new JButton("Start");
+    	fStartButton.addActionListener(fStartStop);
+    	toolbar.add(fStartButton);
+    	fStepButton = new JButton("Step");
+    	fStepButton.addActionListener(fStep);
+    	toolbar.add(fStepButton);
+   	
+    	fInfoSplitter = new JSplitPane();
+    	fInfoSplitter.setLeftComponent(new JScrollPane(fInfo));
+    	fInfoSplitter.setRightComponent(new JScrollPane(fLog));
+    	fInfoSplitter.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    	
+    	fMapSplitter = new JSplitPane();
+    	fMapSplitter.setLeftComponent(fMapPanel);
+    	fMapSplitter.setRightComponent(fInfoSplitter);
+    	
+    	setTitle("Dungeon");
+    	setSize(800, 500);
+    	setLocationRelativeTo(null);
+    	add(toolbar, BorderLayout.PAGE_START);
+    	add(fMapSplitter, BorderLayout.CENTER);
+    	addWindowListener(fWindowListener);
+    	
+    	setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
+	
+	/**
+	 * Refreshes the UI after a game tick
+	 */
+	public void updateGame()
+	{
+		if (App.getSpeed()!=App.NOGRAPHICS) {
+			fMapPanel.repaint();
+			fInfo.updateInfo();
+		}
+	}
+	
+	/**
+	 * Send a message to the game log
+	 * 
+	 * @param message The message to be displayed
+	 */
+	public void log(String message)
+	{
+		if (App.getSpeed()!=App.NOGRAPHICS) {
+		fLog.append(message);
+		fLog.append("\n");}
+	}
+
+	/**
+	 * Make a link appear briefly between two items on the map
+	 * 
+	 * @param item_a The first item
+	 * @param item_b The second item
+	 */
+	public void showLink(Item item_a, Item item_b)
+	{
+		fMapPanel.showLink(item_a, item_b);
+	}
+	
+	/**
+	 * Pauses the game
+	 */
+	public void pauseGame()
+	{
+		fStartStop.actionPerformed(null);
+	}
+	
+	public void changeMapLevel(int level_change)
+	{
+		pauseGame();
+		
+		Hero hero = App.getGame().getHero();
+		
+		String name = App.getGame().getName();
+		int level = App.getGame().getLevel() + level_change;
+		int id = name.hashCode() + level_change;
+		
+		Game game = DungeonBuilder.createDungeon(name, id);
+		game.setLevel(level);
+
+		// Add items to new hero
+		game.getHero().setGold(hero.getGold());
+		for (Treasure t: hero.getInventory())
+			game.getHero().getInventory().add(t);
+		
+		App.setGame(game);
+		
+		fMapPanel.setGame(App.getGame());
+		
+		log("");
+		log("MOVED TO LEVEL " + level);
+		log("");
+		
+		updateGame();
+	}
+	
+	/**
+	 * Sets up a new dungeon level
+	 */
+	ActionListener fNewDungeon = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				String name = JOptionPane.showInputDialog(null, "Enter the name of the dungeon:", "Dungeon", JOptionPane.QUESTION_MESSAGE);
+				if (name != null)
+				{
+					fFileName = null;
+					Game game = DungeonBuilder.createDungeon(name, 0);
+					
+					App.setGame(game);
+					fMapPanel.setGame(game);
+					
+					fLog.setText("");
+					updateGame();
+				}
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+	
+	/**
+	 * Randomise the placement of items
+	 */
+	ActionListener fRandomise = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				Vector<Item> items = new Vector<Item>();
+				items.addAll(App.getGame().getCreatures());
+				items.addAll(App.getGame().getTreasure());
+				items.add(App.getGame().getHero());
+				
+				int max_attempts = 1000;
+				
+				Random rnd = new Random();
+				Rectangle2D bounds = App.getGame().getMap().getBounds(0);
+								
+				for (Item item : items)
+				{
+					int attempts = 0;
+					while (attempts != max_attempts)
+					{
+						attempts += 1;
+						
+						double x = (rnd.nextDouble() * bounds.getWidth()) + bounds.getX();
+						double y = (rnd.nextDouble() * bounds.getHeight()) + bounds.getY();
+						
+						Point2D pt = new Point2D.Double(x,y);
+						Tile t = App.getGame().getMap().getTileAt(pt);
+						
+						if (t instanceof Floor)
+						{
+							if (item.placeAt(pt, App.getGame()));
+								break;
+						}
+					}
+				}
+				
+				fMapPanel.repaint();
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+	
+	/**
+	 * Resets the current dungeon to its initial state
+	 */
+	ActionListener fReset = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			resetDungeon();
+		}
+	};
+	
+	
+	/**
+	 * Resets the current dungeon to its initial state
+	 */
+	public void resetDungeon()
+	{
+		try
+		{
+			Game game = null;
+			
+			if (fFileName != null)
+			{
+				game = new Game();
+				Persistence.loadFromXML(fFileName, game);
+			}
+			else
+			{
+				String name = App.getGame().getName();
+				int level = App.getGame().getLevel();
+				game = DungeonBuilder.createDungeon(name, level);
+			}
+			
+			if (game != null)
+			{
+				App.setGame(game);
+				fMapPanel.setGame(game);
+				
+				fLog.setText("");
+				updateGame();
+			}
+		}
+		catch (Exception ex)
+		{
+			System.err.println(ex);
+		}
+
+	}
+	
+	
+	/**
+	 * Loads a saved game XML file
+	 */
+	ActionListener fOpen = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				// Select a dungeon file
+				JFileChooser dlg = new JFileChooser(fDirectory);
+				if (dlg.showDialog(null, null) == JFileChooser.APPROVE_OPTION)
+			    {
+			    	fFileName = dlg.getSelectedFile().getPath();
+			    	fDirectory = dlg.getCurrentDirectory();
+			    	
+					Game game = new Game();
+					Persistence.loadFromXML(fFileName, game);
+					
+					App.setGame(game);
+					fMapPanel.setGame(game);
+					fInfo.updateInfo();
+			    }
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+
+	/**
+	 * Allows the game to be saved as XML
+	 */
+	ActionListener fSave = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				// Select a dungeon file
+				JFileChooser dlg = new JFileChooser(fDirectory);
+				dlg.setDialogTitle("Save");
+				dlg.setApproveButtonText("Save");
+				dlg.setSelectedFile(new File(App.getGame().getName() + ".xml"));
+				if (dlg.showDialog(null, null) == JFileChooser.APPROVE_OPTION)
+			    {
+			    	String filename = dlg.getSelectedFile().getPath();
+			    	fDirectory = dlg.getCurrentDirectory();
+			    	
+					Persistence.saveToXML(filename, App.getGame());
+			    }
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+
+	/**
+	 * Allows creature behaviour setup.
+	 */
+	ActionListener fSetup = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				// Get list of factions
+				Vector<String> factions = get_factions();
+					
+				// Get list of behaviour classes
+			    Vector<String> behaviours = get_behaviours();
+
+			    for (String faction: factions)
+			    {
+			    	// Choose a behaviour class for this faction
+			    	
+			    	String title = "Set Up";
+			    	String msg = "Set behaviour for " + faction + " faction:";
+			    	String behaviour = (String)JOptionPane.showInputDialog(null, msg, title, JOptionPane.PLAIN_MESSAGE, null, behaviours.toArray(), null);
+			    	
+			    	if (behaviour != null)
+			    		set_behaviour(faction, behaviour);
+			    }
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+		
+		Vector<String> get_factions()
+		{
+			Vector<String> factions = new Vector<String>();
+			
+			for (Creature c: App.getGame().getCreatures())
+			{
+				String faction = c.getFaction();
+				if (!factions.contains(faction))
+					factions.add(faction);
+			}
+			
+			Collections.sort(factions);
+			
+			return factions;
+		}
+		
+		Vector<String> get_behaviours()
+		{
+		    Vector<String> classes = new Vector<String>();
+		    
+		    // TODO: Get this list programmatically
+		    classes.add(DefaultBehaviour.class.getName());
+		    
+		    Collections.sort(classes);
+		    
+		    return classes;
+		}
+		
+		void set_behaviour(String faction, String behaviour)
+		{
+			try
+			{
+				Class<?> behaviour_class = Class.forName(behaviour);
+				if (behaviour_class== null)
+					return;
+				
+				// Get the Behaviour(Creature) constructor 
+				Constructor<?> ctor = behaviour_class.getConstructor(Class.forName("dungeon.model.items.mobs.Creature"));
+				if (ctor == null)
+					return;
+				
+	    		// Set this behaviour on all members of this faction
+				for (Creature c: App.getGame().getCreatures())
+				{
+					if (!faction.equalsIgnoreCase(c.getFaction()))
+						continue;
+					
+					Behaviour b = (Behaviour)ctor.newInstance(c);
+					if (b != null)
+						c.setBehaviour(b);
+				}
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+
+	/**
+	 * Allows the user to ajust game speed
+	 */
+	ActionListener fSpeed = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			final String SLOW = "Slow";
+			final String HALF = "Half";
+			final String NORMAL = "Normal";
+			final String DOUBLE = "Double";
+			final String FAST = "Fast";
+			final String NOGRAPHICS = "No Graphics";
+			
+			String[] speeds = { SLOW, HALF, NORMAL, DOUBLE, FAST, NOGRAPHICS };
+	    	String title = "Speed";
+	    	String msg = "Set game speed:";
+	    	
+	    	String selection = (String)JOptionPane.showInputDialog(null, msg, title, JOptionPane.PLAIN_MESSAGE, null, speeds, FAST);
+	    	
+	    	if (selection == SLOW)
+	    	{
+	    		App.changeSpeed(App.SPEED_SLOW);
+	    		fSpeedButton.setText("Speed: Slow");
+	    	}
+	    	
+	    	if (selection == HALF)
+	    	{
+	    		App.changeSpeed(App.SPEED_HALF);
+	    		fSpeedButton.setText("Speed: Half");
+	    	}
+	    	
+	    	if (selection == NORMAL)
+	    	{
+	    		App.changeSpeed(App.SPEED_NORMAL);
+	    		fSpeedButton.setText("Speed: Normal");
+	    	}
+	    	
+	    	if (selection == DOUBLE)
+	    	{
+	    		App.changeSpeed(App.SPEED_DOUBLE);
+	    		fSpeedButton.setText("Speed: Double");
+	    	}
+	    	
+	    	if (selection == FAST)
+	    	{
+	    		App.changeSpeed(App.SPEED_FAST);
+	    		fSpeedButton.setText("Speed: Fast");
+	    	}
+	    	
+	    	if (selection == NOGRAPHICS)
+	    	{
+	    		App.changeSpeed(App.NOGRAPHICS);
+	    		fSpeedButton.setText("Speed: No Graphics");
+	    	}
+		}
+	};
+
+	/**
+	 * Starts or stops the game
+	 */
+	ActionListener fStartStop = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if (App.getTimer().isRunning())
+			{
+				App.getTimer().stop();
+			}
+			else
+			{
+				App.getTimer().start();
+			}
+			
+			boolean running = App.getTimer().isRunning();
+			
+			fNewButton.setEnabled(!running);
+			fRandomiseButton.setEnabled(!running);
+			fResetButton.setEnabled(!running);
+			fOpenButton.setEnabled(!running);
+			fSaveButton.setEnabled(!running);
+			fStepButton.setEnabled(!running);
+			
+			fStartButton.setText(running ? "Pause" : "Start");
+		}
+	};
+
+	/**
+	 * Performs a single game tick
+	 * <BR>
+	 * Useful for debugging
+	 */
+	ActionListener fStep = new ActionListener()
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				App.getGame().tick();
+				updateGame();
+			}
+			catch (Exception ex)
+			{
+				System.err.println(ex);
+			}
+		}
+	};
+
+	/**
+	 * Housekeeping
+	 */
+	WindowListener fWindowListener = new WindowAdapter()
+	{
+		public void windowOpened(WindowEvent e)
+		{
+	    	fMapSplitter.setDividerLocation(0.8);
+	    	fInfoSplitter.setDividerLocation(0.5);
+	    	
+	    	updateGame();
+		}
+		
+		public void windowClosing(WindowEvent e)
+		{
+			if (App.getTimer().isRunning())
+				App.getTimer().stop();
+			
+			System.exit(0);
+		}
+	};
+	
+	MapPanel fMapPanel = null;
+	InfoPanel fInfo = null;
+	JTextArea fLog = null;
+	JSplitPane fMapSplitter = null;
+	JSplitPane fInfoSplitter = null;
+	
+	JButton fNewButton = null;
+	JButton fRandomiseButton = null;
+	JButton fResetButton = null;
+	JButton fOpenButton = null;
+	JButton fSaveButton = null;
+	JButton fSetupButton = null;
+	JButton fSpeedButton = null;
+	JButton fStartButton = null;
+	JButton fStepButton = null;
+}
