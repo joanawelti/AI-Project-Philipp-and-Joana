@@ -11,10 +11,10 @@ import dungeon.model.items.mobs.Creature;
 import dungeon.ui.MapPanel;
 
 public abstract class BehaviourWithPathfindingAStar implements Behaviour {
-	Point2D targetPosition = null;
+	protected Point2D targetPosition = null;
 	Point2D newTargetPosition = null;
 	PathFind followAction = null;
-	List<Point2D> wayPoints = null;
+	protected List<Point2D> wayPoints = null;
 	Creature fCreature = null;
 
 	public BehaviourWithPathfindingAStar(Creature creature){

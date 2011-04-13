@@ -11,8 +11,8 @@ import dungeon.model.Game;
 enum Action {
 	ATTACK, EVADE, GET_HEALTH_POTION, GET_ENERGY_POTION;
 	
-	private boolean doAction(Action action, Game game) {
-		switch (action) {
+	public boolean doAction(Game game) {
+		switch (this) {
 			case ATTACK: 
 				return doAttack(game);
 			case EVADE: 
@@ -26,22 +26,21 @@ enum Action {
 		}
 	}
 	
-	public static Action doAction(int index, Game game) {
-		Action action = Action.getEnum(index);
-		action.doAction(action, game);
-		return action;
+	public static Action getRandomAction() {
+		return getAction(new Random().nextInt(Action.getNumberOfActions()));
 	}
 	
-	public static Action doRandomAction(Game game) {
-		return doAction(new Random().nextInt(Action.getNumberOfActions()), game);
+	public static Action getDefaultAction() {
+		return Action.ATTACK;
 	}
 	
 	private boolean doAttack(Game game) {
-		return false;
+		game.
+		return followMovingTarget(game, 1);
 	}
 	
 	private boolean doEvade(Game game) {
-		return false;
+		return evadeMovingTarget(game, 1);
 	}
 	
 	private boolean doGetHealthPotion(Game game) {
@@ -53,10 +52,10 @@ enum Action {
 	}
 	
 	/**
-	 * @param index The ordinal number of the enum to return.
-	 * @return the enum with ordinal number index.
+	 * @param index The ordinal number of the Action to return.
+	 * @return the Action with ordinal number index.
 	 */
-	public static Action getEnum(int index) {
+	public static Action getAction(int index) {
 		for ( Action e : Action.values() ) {
 			if (e.ordinal() == index) {
 				return e;
@@ -70,5 +69,26 @@ enum Action {
 	 */
 	public static int getNumberOfActions() {
 		return Action.values().length;
+	}
+	
+	
+	/**
+	 * Return the reward for the taken action
+	 * macht das sinn??
+	 * TODO
+	 */
+	public double getReward() {
+		switch (this) {
+		case ATTACK: 
+			return 0;
+		case EVADE: 
+			return 0;
+		case GET_HEALTH_POTION:
+			return 0;
+		case GET_ENERGY_POTION:
+			return 0;
+		default:
+			return 0;
+		}
 	}
 }
