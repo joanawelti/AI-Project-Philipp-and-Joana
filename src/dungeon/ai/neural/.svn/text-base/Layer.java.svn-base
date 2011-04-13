@@ -1,0 +1,461 @@
+package dungeon.ai.neural;
+
+
+/**
+ * represents a layer in the ann
+ *
+ * @author john alexander
+ */
+public class Layer implements Cloneable {
+
+    //weights and thresholds
+    private Matrix _matrix;
+
+    //activation function
+    private ActivationFunction _activationFunction;
+
+    //number of neurons
+    private int _neurons;
+
+    //next and previous layers
+    private Layer _next;
+    private Layer _previous;
+
+    //last result of output calculation
+    private double[] _output;
+
+    //last error calculation
+    private double[] _error;
+
+    //neuron error deltas
+    private double[] _delta;
+
+    //accumluated deltas for weight and bias values
+    private Matrix _accMatrixDelta;
+
+    //previous deltas for checking sign change
+    private Matrix _lastMatrixDelta;
+
+    //matrix deltas
+    private Matrix _matrixDelta;
+
+
+    /*
+     * constuct a layer
+     */
+    public Layer(ActivationFunction activationFunction, int neuronCount) {
+        _neurons = neuronCount;
+        _activationFunction = activationFunction;
+        _output = new double[_neurons];
+        _error = new double[_neurons];
+        _delta = new double[_neurons];
+    }
+
+    /*
+     * empty layer - used to clone
+     */
+    public Layer() {
+        super();
+    }
+
+    /*
+     * randomize the weight and threshold value matrix
+     */
+    public void reset() {
+        _matrix.randomize(-1, 1);
+    }
+
+    /*
+     * set the weight and threshold matrix
+     */
+    public void setMatrix(Matrix matrix) {
+        _matrix = matrix;
+    }
+
+    /*
+     * set the activation function for this layer
+     */
+    public void setActivationFunction(ActivationFunction activationFunction) {
+        _activationFunction = activationFunction;
+    }
+
+    /*
+     * set the number of neurons in the layer
+     */
+    public void setNeurons(int neurons) {
+        _neurons = neurons;
+    }
+
+    /*
+     * set the accumulated matrix deltas
+     */
+    public void setAccMatrixDeltas(Matrix matrix) {
+        _accMatrixDelta = matrix;
+    }
+
+    /*
+     * set teh last matrix deltas
+     */
+    public void setLastMatrixDelta(Matrix matrix) {
+        _lastMatrixDelta = matrix;
+    }
+    /*
+     * set the matrix deltas
+     */
+
+    public void setMatrixDelta(Matrix matrix) {
+        _matrixDelta = matrix;
+    }
+
+    /*
+     * set the neuron deltas
+     */
+    public void setDeltas(double[] delta) {
+        for (int i = 0; i < delta.length; i++) {
+            _output[i] = delta[i];
+        }
+    }
+
+    /*
+     * set the neuron erros
+     */
+    public void setErrors(double[] error) {
+        for (int i = 0; i < error.length; i++) {
+            _output[i] = error[i];
+        }
+    }
+
+    /*
+     * set the neuron outputs
+     */
+    public void setOutputs(double[] output) {
+        for (int i = 0; i < output.length; i++) {
+            _output[i] = output[i];
+        }
+    }
+
+    /*
+     * get the weight and threshold matrix
+     */
+    public Matrix getMatrix() {
+        return _matrix;
+    }
+
+    /*
+     * get the neuron count for this layer
+     */
+    public int getNeurons() {
+        return _neurons;
+    }
+
+    /*
+     * determins if we are an input layer
+     */
+    public boolean inputLayer() {
+        return (_previous == null);
+    }
+
+    /*
+     * determins if we are an output layer
+     */
+    public boolean outputLayer() {
+        return (_next == null);
+    }
+
+    /*
+     * determeins if we are a hidden layer
+     */
+    public boolean hiddenLayer() {
+        return !(inputLayer() || outputLayer());
+    }
+
+    /*
+     * set the next layer and create a new weight and threshold matrix
+     */
+    public void setNext(Layer next) {
+        _next = next;
+        _matrix = new Matrix(_neurons + 1, _next._neurons);
+        _accMatrixDelta = new Matrix(_neurons + 1, _next._neurons);
+        _lastMatrixDelta = new Matrix(_neurons + 1, _next._neurons);
+        _matrixDelta = new Matrix(_neurons + 1, _next._neurons);
+    }
+
+    /*
+     * set the next layer, pointer only!
+     */
+    public void setNextPointer(Layer next) {
+        _next = next;
+    }
+
+    /*
+     * return the next layer
+     */
+    public Layer getNext() {
+        return _next;
+    }
+
+    /*
+     * return the previous layer
+     */
+    public Layer getPrevious() {
+        return _previous;
+    }
+
+    /*
+     * return the output from this layer
+     */
+    public double[] getOutput() {
+        return _output;
+    }
+
+    /*
+     * set the previous layer
+     */
+    public void setPrevious(Layer previous) {
+        _previous = previous;
+    }
+
+    /*
+     * set the bias value for a neuron
+     */
+    public void setBias(int i, double value) {
+        _matrix.set(i - 1, _next._neurons, value);
+    }
+
+    /*
+     * get te bias value for a neuron
+     */
+    public double getBias(int i) {
+        return _matrix.get(i - 1, _next._neurons);
+    }
+
+    /*
+     * set the inital delta values
+     */
+    public void setInitalDeltas(double value) {
+        _matrixDelta.set(value);
+    }
+
+    /*
+     * set the error value for a neuron
+     */
+    public void setError(int i, double value) {
+        _error[i] = 0;
+    }
+
+    /*
+     * create an input matrix from the given pattern
+     */
+    public Matrix createInputMatrix(double pattern[]) {
+
+        double[][] temp = new double[1][pattern.length + 1];
+
+        for (int i = 0; i < pattern.length; i++) {
+            temp[0][i] = pattern[i];
+        }
+
+        temp[0][pattern.length] = 1;
+
+        return new Matrix(temp);
+    }
+
+    /*
+     * compute the output from this layer from the given input pattern
+     */
+    public double[] computeOutputs(double[] pattern) {
+
+        //copy into output
+        for (int i = 0; i < _neurons; i++) {
+            _output[i] = pattern[i];
+        }
+
+        //if this is the output layer, just return input
+        if (outputLayer()) {
+            return _output;
+        }
+
+        Matrix input = createInputMatrix(pattern);
+        double[] output = new double[_next._neurons];
+
+        //for each neuron in the next layer set its output
+        for (int i = 0; i < _next._neurons; i++) {
+            Matrix temp = _matrix.getCol(i);
+            double result = MatrixMath.dotProduct(temp, input);
+            output[i] = _activationFunction.activationFunction(result);
+        }
+
+        return output;
+    }
+
+    /*
+     * usefull for debuging
+     */
+    @Override
+    public String toString() {
+
+        String string = "";
+
+        if (!outputLayer()) {
+            if (inputLayer()) {
+                string += "Input layer\n";
+            } else {
+                string += "Hidden layer\n";
+            }
+
+            for (int i = 0; i < _neurons; i++) {
+                Matrix temp = _matrix.getRow(i);
+                string += "\tNeuron " + i + ": " + temp.toString();
+            }
+        } else {
+            string += "Output layer\n";
+        }
+
+        return string;
+    }
+
+    /*
+     * determine the sign of the value
+     */
+    private int sign(double value) {
+
+        //we use an aproximation of 0
+        if (Math.abs(value) < Network.ZERO_VALUE) {
+            return 0;
+        } else if (value > 0) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /*
+     * calulate the error value for this output layer
+     * given the ideal values
+     */
+    public void calculateError(double[] ideal) {
+
+        for (int i = 0; i < _neurons; i++) {
+            _delta[i] = Math.min(Math.max(_activationFunction.derivativeFunction(_output[i])
+                    * (ideal[i] - _output[i]), -1e20), 1e20);
+        }
+
+    }
+
+    /*
+     * calculate the error value for this layer
+     */
+    public void calculateError() {
+
+        for (int i = 0; i < _next.getNeurons(); i++) {
+            for (int j = 0; j < _neurons; j++) {
+
+                //weight deltas
+                _accMatrixDelta.add(j, i, _next._delta[i] * _output[j]);
+                _error[j] += _matrix.get(j, i) * _next._delta[i];
+            }
+
+            //bias deltas - on the 'virtual' row
+            _accMatrixDelta.add(_neurons, i, _next._delta[i]);
+
+        }
+
+        //if this is a hidden layer, need to set the error deltas
+        if (hiddenLayer()) {
+            for (int i = 0; i < _neurons; i++) {
+                _delta[i] = Math.min(Math.max(_activationFunction.derivativeFunction(_output[i])
+                        * _error[i], -1e20), 1e20);
+            }
+        }
+
+    }
+
+    /*
+     * learn this layer in the network
+     * this is the interesting bit of rprop
+     */
+    public void learn() {
+
+
+        // for every value in our weight and bias matrix
+        for (int i = 0; i < _matrix.getRows(); i++) {
+            for (int j = 0; j < _matrix.getCols(); j++) {
+
+                // check if the gradient has changed direction
+                final int change = sign(_accMatrixDelta.get(i, j) * _lastMatrixDelta.get(i, j));
+                double weightChange = 0;
+
+                // no change, so we should increase the delta so we converge faster
+                if (change > 0) {
+
+                    // increase the delta
+                    double delta = _matrixDelta.get(i, j) * Network.INCREASE_FACTOR;
+
+                    // check we havn't gone too large
+                    delta = Math.min(delta, Network.DELTA_MAX);
+
+                    // set the new weight in the direction of the gradient
+                    weightChange = sign(_accMatrixDelta.get(i, j)) * delta;
+
+                    // set the altered delta for the neuron
+                    _matrixDelta.set(i, j, delta);
+
+                    // set the previous gradient value for this neuron
+                    _lastMatrixDelta.set(i, j, _accMatrixDelta.get(i, j));
+
+                    // change<0, so the last delta was too big
+                } else if (change < 0) {
+
+                    // decrease the delta
+                    double delta = _matrixDelta.get(i, j) * Network.DECREASE_FACTOR;
+
+                    // check haven't gone to small
+                    delta = Math.max(delta, Network.DELTA_MIN);
+
+                    // set the altered delta for the neuron.
+                    _matrixDelta.set(i, j, delta);
+
+                    // set previous gradient=0 so no change in sign next time.
+                    _lastMatrixDelta.set(i, j, 0);
+
+
+                    // so no change to the delta
+                } else if (change == 0) {
+
+                    // keep moving in the direction of the gradient
+                    weightChange = sign(_accMatrixDelta.get(i, j)) * _matrixDelta.get(i, j);
+
+                    // set the previous gradient value for this neuron
+                    _lastMatrixDelta.set(i, j, _accMatrixDelta.get(i, j));
+                }
+
+                // change the weights and biases
+                _matrix.add(i, j, weightChange);
+
+            }
+        }
+
+        // clear out the gradient accumulator for the next iteration
+        _accMatrixDelta.clear();
+    }
+
+
+    /*
+     * clone this layer
+     */
+    @Override
+    protected Layer clone() throws CloneNotSupportedException {
+
+        Layer layer = new Layer();
+        layer.setMatrix(_matrix.clone());
+        layer.setActivationFunction(new ActivationFunction(_activationFunction.getType()));
+        layer.setNeurons(_neurons);
+        layer.setAccMatrixDeltas(_accMatrixDelta.clone());
+        layer.setLastMatrixDelta(_lastMatrixDelta.clone());
+        layer.setMatrixDelta(_matrixDelta.clone());
+        layer.setDeltas(_delta);
+        layer.setErrors(_error);
+        layer.setOutputs(_output);
+        return layer;
+    }
+
+}

@@ -1,0 +1,152 @@
+package dungeon.ai;
+
+import javax.swing.JFrame;
+import dungeon.ai.actions.ActionAttack;
+import dungeon.ai.ai_code.FQ_learner;
+import dungeon.ai.ai_code.OgreState;
+import dungeon.ai.ai_code.Transition;
+import dungeon.model.Game;
+import dungeon.model.items.mobs.Creature;
+import dungeon.model.items.mobs.Movement;
+
+public class CircularChaseGenNN extends BehaviourWithPathfindingAStar {
+
+	int creatureindex = 0;
+	int oldAction = 2;
+	float distIterStepX = 1f;
+	float distIterStepY = 0.5f;
+	float energyIterStep = 2.5f;
+	static boolean startCheck = true;
+
+	OgreState oldState = null;
+	OgreState newState = null;
+	int tick = 0;
+
+	public static double[][] Q_table = null;
+
+	public CircularChaseGenNN(Creature creature) {
+		super(creature);
+		// draw values
+		FQ_learner.getInstance().qGraph
+				.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		FQ_learner.getInstance().qgraph.initGraphQ(Q_table, FQ_learner
+				.getInstance().transitionList);
+		FQ_learner.getInstance().qGraph.add(FQ_learner.getInstance().qgraph);
+		FQ_learner.getInstance().qGraph.setSize(550, 550);
+		FQ_learner.getInstance().qGraph.setLocation(00, 500);
+		FQ_learner.getInstance().qGraph.setVisible(true);
+	}
+
+	public boolean onTick(Game game) {
+
+		Movement m = game.getHero().getMovement();
+		int newAction = 2;
+		switch (FQ_learner.runningstate) {
+		case 0:
+			// gather the data
+			if (m.Train) {
+				FQ_learner.runningstate = 1;
+			} else {
+				startCheck = false;
+				if (m.Attack)
+					newAction = 0;
+				if (m.RunAway)
+					newAction = 1;
+				if ((newAction != 2)) {
+					// record a transition
+					newState = getRealTimeState(game);
+					Transition t = new Transition(newState, newAction, newState);
+					FQ_learner.getInstance().addTransitionNoTrain(t);
+					FQ_learner.getInstance().qgraph.initGraphQ(Q_table,
+							FQ_learner.getInstance().transitionList);
+					FQ_learner.getInstance().qGraph.update(FQ_learner
+							.getInstance().qGraph.getGraphics());
+				}
+			}
+			break;
+		case 1:
+			// do the training
+			FQ_learner.getInstance().FQwithGraphicsNN();
+			FQ_learner.runningstate = 2;
+
+			break;
+		case 2:
+			// now ready to act using what we've learned
+			if (m.Play) {
+				FQ_learner.runningstate = 0;
+			} else {
+				if (FQ_learner.getInstance().queryNetwork(
+						getRealTimeState(game), 0)[0] > 0.5)
+					newAction = 1;
+				else
+					newAction = 0;
+				System.out.println("action:" + newAction);
+			}
+		}
+
+		if (oldAction != newAction) {
+			oldAction = newAction;
+			targetPosition = null;
+			wayPoints = null;
+		}
+
+		boolean moved = false;
+
+		// first check if the creature can attack something,
+		if (ActionAttack.performAction(fCreature, game))
+			moved = true;
+		else
+			switch (oldAction) {
+			case 0:
+				moved = attack(game);
+				break;
+			case 1:
+				moved = evade(game);
+				break;
+			case 2:
+				moved = rest();
+				break;
+			}
+		return moved;
+	}
+
+	private boolean attack(Game game) {
+		creatureindex = 1;
+		return followMovingTarget(game, creatureindex);
+	}
+
+	private boolean evade(Game game) {
+		creatureindex = 1;
+		return evadeMovingTarget(game, creatureindex);
+	}
+
+	private boolean rest() {
+		return false;
+	}
+
+	public boolean deathTick(Game game) {
+		return false;
+	}
+
+	public boolean gameOverTick(Game game) {
+		return false;
+	}
+
+	// this gets the current state (all four variables) and is used for the
+	// transition experiences
+	public OgreState getRealTimeState(Game game) {
+
+		double tempCreatureEnergy = (double) fCreature.getCurrentEnergy()
+				/ (double) fCreature.getMaxEnergy();
+		double tempCreatureHealth = (double) fCreature.getCurrentHealth()
+				/ (double) fCreature.getMaxHealth();
+		double enemyHealth = (double) game.getCreatures().get(1).getCurrentHealth()
+				/ (double) game.getCreatures().get(0).getMaxHealth();
+		double distance = (double) game.getCreatures().get(1).getLocation()
+				.distance(fCreature.getLocation()) / 36.0;// 36 is to normalise
+															// between 0 and 1
+		return new OgreState(tempCreatureHealth, tempCreatureEnergy,
+				enemyHealth, distance);
+	}
+
+}

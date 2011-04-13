@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/csc245_CS3516/!svn/ver/138/dungeon/ai/ai_code
+END
+TeamState.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/ai_code/TeamState.java
+END
+Q_learner.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/ai_code/Q_learner.java
+END
+Transition.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/138/dungeon/ai/ai_code/Transition.java
+END
+PathFinding.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/ai_code/PathFinding.java
+END
+NFQ_learner.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/csc245_CS3516/!svn/ver/138/dungeon/ai/ai_code/NFQ_learner.java
+END
+OgreState.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/ai_code/OgreState.java
+END
+FQ_learner.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/ai_code/FQ_learner.java
+END

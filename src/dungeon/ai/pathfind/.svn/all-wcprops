@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/csc245_CS3516/!svn/ver/125/dungeon/ai/pathfind
+END
+PathFindDepth.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/pathfind/PathFindDepth.java
+END
+PathFindBestFirst.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/csc245_CS3516/!svn/ver/151/dungeon/ai/pathfind/PathFindBestFirst.java
+END
+PathfindAStar.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/pathfind/PathfindAStar.java
+END
+PathFindAStar.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/159/dungeon/ai/pathfind/PathFindAStar.java
+END
+PathFind.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/pathfind/PathFind.java
+END
+PathFindHillClimb.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/csc245_CS3516/!svn/ver/151/dungeon/ai/pathfind/PathFindHillClimb.java
+END

@@ -1,0 +1,87 @@
+package dungeon.ai.neural;
+
+/**
+ * contains sigmoidal (positive) and hyperbolic tangent (positive and negitive)
+ * activation  functions.
+ *
+ *
+ * @author john alexander
+ */
+public class ActivationFunction {
+
+    public static final int SIGMODIAL = 1;
+    public static final int HYPERBOLIC_TANGENT = 2;
+    // are we using sigmodial or hyperbolic
+    private int _type;
+
+    /*
+     * sets the type of function to use
+     */
+    public ActivationFunction(final int type) {
+        _type = type;
+    }
+
+    /*
+     * threshold function
+     */
+    public double activationFunction(double d) {
+        if (_type == SIGMODIAL) {
+            return sigmodial(d);
+        }
+        if (_type == HYPERBOLIC_TANGENT) {
+            return hyperbolic(d);
+        }
+        //should not reach here
+        return 0.0;
+    }
+
+    /*
+     * sigmodial threshold function
+     */
+    public double sigmodial(double d) {
+        return 1 / (1 + Math.exp(-1.0 * d));
+    }
+
+    /*
+     * hyperbolic tangent threshold function
+     */
+    public double hyperbolic(double d) {
+        double temp = Math.exp(2 * d);
+        return (temp - 1) / (temp + 1);
+    }
+
+    /*
+     * derivative of the threshold function
+     */
+    public double derivativeFunction(double d) {
+        if (_type == SIGMODIAL) {
+            return sigmodialDerivative(d);
+        }
+        if (_type == HYPERBOLIC_TANGENT) {
+            return hyperbolicDerivative(d);
+        }
+        //should not reach here
+        return 0.0;
+    }
+
+    /*
+     * derivative of the sigmodial threshold function
+     */
+    public double sigmodialDerivative(double d) {
+        return d*(1 - d);
+    }
+
+    /*
+     * derivative of the hyperbolic tangent threshold function
+     */
+    public double hyperbolicDerivative(double d) {
+        return 1 - Math.pow(hyperbolic(d), 2);
+    }
+    
+    /*
+     * return the type of this function
+     */
+    public int getType() {
+        return _type;
+    }
+}

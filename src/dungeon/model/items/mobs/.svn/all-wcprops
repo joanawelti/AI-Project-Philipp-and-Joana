@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/csc245_CS3516/!svn/ver/116/dungeon/model/items/mobs
+END
+Faction.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/csc245_CS3516/!svn/ver/116/dungeon/model/items/mobs/Faction.java
+END
+Orc.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/104/dungeon/model/items/mobs/Orc.java
+END
+Creature.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/148/dungeon/model/items/mobs/Creature.java
+END
+Movement.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/148/dungeon/model/items/mobs/Movement.java
+END
+FastOgre.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/csc245_CS3516/!svn/ver/153/dungeon/model/items/mobs/FastOgre.java
+END
+Ogre.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/104/dungeon/model/items/mobs/Ogre.java
+END
+Hero.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/104/dungeon/model/items/mobs/Hero.java
+END
+Mob.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/104/dungeon/model/items/mobs/Mob.java
+END

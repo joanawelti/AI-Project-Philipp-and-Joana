@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BowStateMachine
+END
+State.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BowStateMachine/State.java
+END
+Retreat.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BowStateMachine/Retreat.java
+END
+AttackState.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BowStateMachine/AttackState.java
+END
+RestState.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BowStateMachine/RestState.java
+END

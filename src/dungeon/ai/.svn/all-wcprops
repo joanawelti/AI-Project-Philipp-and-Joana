@@ -1,0 +1,197 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/csc245_CS3516/!svn/ver/145/dungeon/ai
+END
+FQLearnerGenData.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FQLearnerGenData.java
+END
+EvadeHeroBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/EvadeHeroBehaviour.java
+END
+Vision.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/Vision.java
+END
+FourOnOneMusterThenAttackQLearner.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FourOnOneMusterThenAttackQLearner.java
+END
+SitAndWaitBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/SitAndWaitBehaviour.java
+END
+FourOnOneMusterThenAttack.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FourOnOneMusterThenAttack.java
+END
+NFQLearnerGenData.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/NFQLearnerGenData.java
+END
+FollowCreature1Behaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FollowCreature1Behaviour.java
+END
+Behaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/Behaviour.java
+END
+DefaultBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/DefaultBehaviour.java
+END
+FollowOpponentBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FollowOpponentBehaviour.java
+END
+BehaviourWithPathfinding.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/BehaviourWithPathfinding.java
+END
+NFQLearner.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/NFQLearner.java
+END
+CircularChaseGenNN.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/155/dungeon/ai/CircularChaseGenNN.java
+END
+NewBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/NewBehaviour.java
+END
+HeroBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/HeroBehaviour.java
+END
+FollowHeroBehaviourHillClimb.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/FollowHeroBehaviourHillClimb.java
+END
+RiddleBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/csc245_CS3516/!svn/ver/142/dungeon/ai/RiddleBehaviour.java
+END
+FollowHeroBehaviourDepth.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/FollowHeroBehaviourDepth.java
+END
+LineOfSight.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/LineOfSight.java
+END
+FollowHeroBehaviourBestFirst.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/FollowHeroBehaviourBestFirst.java
+END
+BehaviourWithPathfindingHillClimb.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/BehaviourWithPathfindingHillClimb.java
+END
+FollowHeroBehaviourAStar.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/FollowHeroBehaviourAStar.java
+END
+BehaviourWithPathfindingDepth.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/BehaviourWithPathfindingDepth.java
+END
+BehaviourWithPathfindingBestFirst.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/BehaviourWithPathfindingBestFirst.java
+END
+FollowHeroBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/FollowHeroBehaviour.java
+END
+BehaviourWithPathfindingAStar.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/csc245_CS3516/!svn/ver/150/dungeon/ai/BehaviourWithPathfindingAStar.java
+END
+AttackHeroBehaviour.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/AttackHeroBehaviour.java
+END
+CollisionDetection.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/csc245_CS3516/!svn/ver/104/dungeon/ai/CollisionDetection.java
+END
+PickupTreasureInRoom.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/PickupTreasureInRoom.java
+END
+AttackInSight.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/AttackInSight.java
+END
+FourOnOneDirectAttack.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/csc245_CS3516/!svn/ver/148/dungeon/ai/FourOnOneDirectAttack.java
+END
