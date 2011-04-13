@@ -1,0 +1,1 @@
+## automatic learning #### scenario:one creature against a (modifiable) number of other creaturesaim: reach exit of dungeonwith use of potions## learning techniquereinforcement learning(maybe NN)## reinforcment learning# rewards# actions# states
