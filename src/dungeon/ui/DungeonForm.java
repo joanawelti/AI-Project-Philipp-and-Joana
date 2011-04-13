@@ -59,6 +59,8 @@ public class DungeonForm extends JFrame
 		
     	fInfo = new InfoPanel();
     	
+    	fParameter = new ParameterPanel();
+    	
     	fLog = new JTextArea();
     	fLog.setEditable(false);
     	fLog.setLineWrap(true);
@@ -102,9 +104,15 @@ public class DungeonForm extends JFrame
     	fInfoSplitter.setRightComponent(new JScrollPane(fLog));
     	fInfoSplitter.setOrientation(JSplitPane.VERTICAL_SPLIT);
     	
+    	// splitter for parameter
+    	fRightSideSplitter = new JSplitPane();
+    	fRightSideSplitter.setLeftComponent(new JScrollPane(fParameter));
+    	fRightSideSplitter.setRightComponent(fInfoSplitter);
+    	fRightSideSplitter.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    	
     	fMapSplitter = new JSplitPane();
     	fMapSplitter.setLeftComponent(fMapPanel);
-    	fMapSplitter.setRightComponent(fInfoSplitter);
+    	fMapSplitter.setRightComponent(fRightSideSplitter);
     	
     	setTitle("Dungeon");
     	setSize(800, 500);
@@ -338,6 +346,16 @@ public class DungeonForm extends JFrame
 					App.setGame(game);
 					fMapPanel.setGame(game);
 					fInfo.updateInfo();
+					
+					// if game is a reinforcement learner problem, display settings dialog
+					if (game.isReinforcementLearner()) {
+						fParameter.setContentToVisible(true);
+					} else {
+						System.out.println("remove");
+						fParameter.setContentToVisible(false);
+					}
+					fParameter.repaint();
+					
 			    }
 			}
 			catch (Exception ex)
@@ -584,7 +602,8 @@ public class DungeonForm extends JFrame
 		public void windowOpened(WindowEvent e)
 		{
 	    	fMapSplitter.setDividerLocation(0.8);
-	    	fInfoSplitter.setDividerLocation(0.5);
+	    	fRightSideSplitter.setDividerLocation(0.3);
+	    	fInfoSplitter.setDividerLocation(0.8);
 	    	
 	    	updateGame();
 		}
@@ -600,9 +619,11 @@ public class DungeonForm extends JFrame
 	
 	MapPanel fMapPanel = null;
 	InfoPanel fInfo = null;
+	ParameterPanel fParameter = null;
 	JTextArea fLog = null;
 	JSplitPane fMapSplitter = null;
 	JSplitPane fInfoSplitter = null;
+	JSplitPane fRightSideSplitter = null;
 	
 	JButton fNewButton = null;
 	JButton fRandomiseButton = null;
