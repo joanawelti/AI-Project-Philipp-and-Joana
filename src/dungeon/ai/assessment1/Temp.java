@@ -44,7 +44,7 @@ public class Temp extends BehaviourWithPathfindingAStar {
 			ticks = 0; 
 		} else {
 			ticks += 1;
-			if (ticks < MAXTICKS) {
+			if (ticks > MAXTICKS) {
 				// set reward to -1 since we've been stuck in the same state for 20 ticks
 				newAction = ReinforcementLearner.getNextAction(newState);
 				newState.setOgreAction(newAction);
@@ -94,7 +94,7 @@ public class Temp extends BehaviourWithPathfindingAStar {
 	}
 
 	public boolean gameOverTick(Game game) {
-		if (fCreature.getCurrentHealth() < 0) {
+		if (fCreature.getCurrentHealth() > 0) {
 			ReinforcementLearner.setReward(oldState, newState);
 		} else {
 			ReinforcementLearner.setPenalty(oldState, newState);

@@ -2,6 +2,7 @@ package dungeon.ai.assessment1;
 
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
+import dungeon.ai.pathfind.PathFindAStar;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 
@@ -35,12 +36,9 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private Qtable learner = new Qtable();
 
 	
-	public Assessment1Behaviour(Game game, Creature creature) {
+	public Assessment1Behaviour(Creature creature) {
 		super(creature);
 		fCreature = creature;
-				
-		// set initial state
-		oldState = new State(game, creature);
 	}
 	
 	/**
@@ -48,7 +46,11 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * @return true if update occurred; false else.
 	 * @return true if fCreature did something; false else.
 	 */
-	public boolean onTick(Game game) {						
+	public boolean onTick(Game game) {					
+		if (newState == null) {
+			// set initial state
+			oldState = new State(game, fCreature);
+		}		
 		// get new state
 		newState = new State(game, fCreature);		
 		
@@ -90,7 +92,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			learner.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
 			moved = true;
 		} else {
-			moved = newAction.doAction(game);
+			moved = doAction(newAction,game);
 		}
 //			
 //		switch (oldAction) {
@@ -103,25 +105,36 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 //			}		
 		return moved;
 	}
-
-	/**
-	 * OLD
-	 * @param game
-	 * @return
-	 */
-	private boolean attack(Game game) {
-		int creatureindex = 1;
-		return followMovingTarget(game, creatureindex);
+	
+	public boolean doAction(Action action, Game game) {
+		switch (action) {
+			case ATTACK: 
+				return doAttack(game);
+			case EVADE: 
+				return doEvade(game);
+			case GET_HEALTH_POTION:
+				return doGetHealthPotion(game);
+			case GET_ENERGY_POTION:
+				return doGetEnergyPotion(game);
+			default:
+				return false;
+		}
 	}
-
-	/**
-	 * OLD
-	 * @param game
-	 * @return
-	 */
-	private boolean evade(Game game) {
-		int creatureindex = 1;
-		return evadeMovingTarget(game, creatureindex);
+	
+	private boolean doAttack(Game game) {
+		return followMovingTarget(game, 1);
+	}
+	
+	private boolean doEvade(Game game) {
+		return evadeMovingTarget(game, 1);
+	}
+	
+	private boolean doGetHealthPotion(Game game) {
+		return false;
+	}
+	
+	private boolean doGetEnergyPotion(Game game) {
+		return false;
 	}
 
 	/**
