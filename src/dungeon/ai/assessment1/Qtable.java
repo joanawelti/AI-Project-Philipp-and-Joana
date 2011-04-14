@@ -49,7 +49,7 @@ public class Qtable {
 	 */
 	private static void init() {
 		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];
-		System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
+		//System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
 		for(int i=0;i<qtable.length;i++) {
 			for(int j=0;j<qtable[0].length;j++) {
 				qtable[i][j] = init_value;
@@ -68,35 +68,51 @@ public class Qtable {
 		qtable[oldState.getIndex()][oldAction.ordinal()] += 
 			learning_rate * (reward + discount_rate * getBestActionValue(newState) - qtable[oldState.getIndex()][oldAction.ordinal()]);
 	}
+
+	/**
+	 * Gets the best action to take for the given state.
+	 * @return Returns the best action to take for the given state.
+	 */
+//	private static Action getBestAction(State state) {
+//		double max = Double.NEGATIVE_INFINITY;
+//		int actionIndex = -1;
+//		for(int i=0;i<qtable[state.getIndex()].length;i++) {
+//			if (qtable[state.getIndex()][i] > max) {
+//				max = qtable[state.getIndex()][i];
+//				actionIndex = i;			
+//			}
+//		}
+//		return Action.getAction(actionIndex);
+//	}
 	
 	/**
 	 * Gets the best action to take for the given state.
 	 * @return Returns the best action to take for the given state.
 	 */
 	private static Action getBestAction(State state) {
-		double max = Double.NEGATIVE_INFINITY;
-		int actionIndex = -1;
-		
-//		System.out.println("Qtable lenght = " + qtable[state.getIndex()].length);		
-		
-		for(int i=0;i<qtable[state.getIndex()].length;i++) {
+		double max = qtable[state.getIndex()][0];
+		boolean allSame = true;
+		int actionIndex = 0;
+		for(int i=1;i<qtable[state.getIndex()].length;i++) {
 			if (qtable[state.getIndex()][i] > max) {
+				allSame = false;
 				max = qtable[state.getIndex()][i];
 				actionIndex = i;			
 			}
-				//else {
-//		
-//				System.out.println("qtable[state.getIndex()][i] = " + qtable[state.getIndex()][i]);
-//			}
 		}
-		return Action.getAction(actionIndex);
+		if(allSame) {
+			return Action.getRandomAction();
+		} else {
+			return Action.getAction(actionIndex);
+		}
 	}
+	
 	
 	/**
 	 * Gets a random action
 	 * @return Returns a random action to take
 	 */
-	private static Action getRandomAction() {
+	static Action getRandomAction() {
 		return Action.getRandomAction();
 	}
 	
@@ -119,7 +135,7 @@ public class Qtable {
 	 * @return The value of the best action for the current state.
 	 */
 	private static double getBestActionValue(State state) {
-		double max = Double.MIN_NORMAL;
+		double max = Double.NEGATIVE_INFINITY;
 		for(int i=0;i<qtable[state.getIndex()].length;i++) {
 			if (qtable[state.getIndex()][i] > max) {
 				max = qtable[state.getIndex()][i];
@@ -130,6 +146,19 @@ public class Qtable {
 	
 	private static double getValue(State state, Action action) {
 		return qtable[state.getIndex()][action.ordinal()];
+	}
+	
+	public static String out() {
+		String out = "";
+		int i,j;
+		for(i=0;i<qtable.length;i++) {
+			for(j=0;j<qtable[0].length-1;j++) {
+				out += qtable[i][j] + " ; ";				
+			}
+			out += qtable[i][j];
+			out += "\n";
+		}
+		return out;
 	}
 }
 

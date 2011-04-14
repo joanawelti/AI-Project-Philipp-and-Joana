@@ -51,7 +51,8 @@ public class State {
 	}
 	
 	public static int getMaxIndex() {
-		return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT;
+		//return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT;
+		return ENERGY_SECTION_CNT * LENGTH_SECTION_CNT;
 	}
 	
 	/**
@@ -60,12 +61,16 @@ public class State {
 	private void setIndex() {
 		int healthIndex = getIndex( getHealth(), healthInterval, HEALTH_SECTION_CNT);
 		int energyIndex = getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT);
-		int distanceIndex = getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT);
-		int temp =  
-			healthIndex + // health dimension 
-			(energyIndex*ENERGY_SECTION_CNT) + // energy dimension 
-			(distanceIndex*LENGTH_SECTION_CNT*ENERGY_SECTION_CNT); //distance dimension
-		this.index = temp;
+		int distanceIndex = getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT); 
+			
+//		this.index = 
+//			healthIndex + // health dimension 
+//			(energyIndex*HEALTH_SECTION_CNT) + // energy dimension 
+//			(distanceIndex*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance dimension
+
+		this.index = 
+		(energyIndex) + // energy dimension 
+		(distanceIndex*ENERGY_SECTION_CNT); //distance dimension			
 	}
 	
 	public boolean hasNotChanged(State state) {
@@ -131,5 +136,13 @@ public class State {
 	public void setDistanceToEnemy(double distanceToEnemy) {
 		this.distanceToEnemy = distanceToEnemy;
 	}
+	
+	@Override
+	public String toString() {
+		String out = "";
+		out += "energy = " + getEnergy() + " ~ " + getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT) + "\n" +
+		       "distance = " + getDistanceToEnemy() + " ~ " + getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT);
+		return out;
+	}	
 }
 

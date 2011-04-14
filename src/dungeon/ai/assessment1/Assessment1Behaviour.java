@@ -9,7 +9,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	/** Constants */ 
 	private final int MAXTICKS = 20;	
 	
-	private final static int PENALTY_STUCK = -3;
+	private final static int PENALTY_STUCK = -1;
 	private final static int PENALTY_DIED = -10;
 	private final static int PENALTY_HIT_ENEMY = -3;
 	
@@ -61,13 +61,11 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			if (ticks > MAXTICKS) {
 				// get next action
 				newAction = Qtable.getGreedyAction(newState, game);
-				
-				if (newAction == null) {
-					System.out.println("ohoh2");
-				}
+				//newAction = Qtable.getRandomAction();
 				
 				// and give penalty because creature was stuck
 				Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
+				ticks = 0;
 			}						
 		} else {						
 			// Update Q-table
@@ -76,18 +74,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			// get appropriate action
 			newAction = Qtable.getGreedyAction(newState, game);
 			
-			if (newAction == null) {
-				System.out.println("ohoh1");
-			}
-			
 			oldState = newState;
 			ticks = 0;
 		}	
 		
 		// if action changed
 		if (newAction != oldAction) {
-			// save old action 
-			oldAction = newAction;
 			// and recalculate paths
 			targetPosition = null;
 			wayPoints = null;
@@ -103,24 +95,28 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		} else {
 			moved = doAction(newAction,game);
 		}	
+		
+		// save old action 
+		oldAction = newAction;
+		
+//		// print Qtable
+//		System.out.println( Qtable.out() + "\n " + 
+//				            oldState.toString() + "\n " + 
+//				            newState.toString());
+		
 		return moved;
 	}
 	
-	public boolean doAction(Action action, Game game) {
-		
-		if (action == null) {
-			System.out.println("ohoh action");
-		}
-		
+	public boolean doAction(Action action, Game game) {	
 		switch (action) {
 			case ATTACK: 
 				return doAttack(game);
 			case EVADE: 
 				return doEvade(game);
-			case GET_HEALTH_POTION:
-				return doGetHealthPotion(game);
-			case GET_ENERGY_POTION:
-				return doGetEnergyPotion(game);
+//			case GET_HEALTH_POTION:
+//				return doGetHealthPotion(game);
+//			case GET_ENERGY_POTION:
+//				return doGetEnergyPotion(game);
 			default:
 				return false;
 		}
