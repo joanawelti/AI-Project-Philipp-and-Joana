@@ -19,13 +19,6 @@ public class ParameterPanel extends JPanel {
 	
 	private static final long serialVersionUID = 5458256289234189978L;
 	
-	private int ogreValue = 1;
-	private double initValue = 0.01;
-	private double alphaValue = 0.5;
-	private double discountValue = 0.9;
-	private double greedinessValue = 0.9;
-	
-	
 	private JLabel ogresLabel = null;
 	private JLabel initValueLabel = null;
 	private JLabel alphaLabel = null;
@@ -53,9 +46,13 @@ public class ParameterPanel extends JPanel {
 	private String title = "Settings";
 	private String reset = "reset";
 	
+	private ReinforcementLearnerParameters params;
+	
 	
 	
 	public ParameterPanel() {
+		params = new ReinforcementLearnerParameters();
+		
 		setBorder(BorderFactory.createTitledBorder(title));
 		setContent();
 		setContentToVisible(false);
@@ -70,23 +67,23 @@ public class ParameterPanel extends JPanel {
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 		
 		ogresLabel = new JLabel(ogres);
-		model = new SpinnerNumberModel(ogreValue, 0, 10, 1);
+		model = new SpinnerNumberModel(params.getOgreDefaultValue(), 0, 10, 1);
 		ogresSpinner = new JSpinner(model);
 		
 		initValueLabel = new JLabel(init);
-		model = new SpinnerNumberModel(initValue, 0.00, 1.00, 0.01);
+		model = new SpinnerNumberModel(params.getInitDefaultValue(), 0.00, 1.00, 0.01);
 		initValueSpinner = new JSpinner(model);
 		
 		alphaLabel = new JLabel(alpha);
-		model = new SpinnerNumberModel(alphaValue, 0.00, 1.00, 0.01);
+		model = new SpinnerNumberModel(params.getAlphaDefaultValue(), 0.00, 1.00, 0.01);
 		alphaValueSpinner = new JSpinner(model);
 		
 		discountLabel = new JLabel(discountfactor);
-		model = new SpinnerNumberModel(discountValue, 0.00, 1.00, 0.01);
+		model = new SpinnerNumberModel(params.getDiscountDefaultValue(), 0.00, 1.00, 0.01);
 		discountValueSpinner = new JSpinner(model);		
 		
 		greedinessLabel = new JLabel(greediness);
-		model = new SpinnerNumberModel(greedinessValue, 0.00, 1.00, 0.01);
+		model = new SpinnerNumberModel(params.getGreedinessDefaultValue(), 0.00, 1.00, 0.01);
 		greedinessValueSpinner = new JSpinner(model);
 		
 		
@@ -184,11 +181,11 @@ public class ParameterPanel extends JPanel {
 	
 	
 	private void resetValues() {
-		ogresSpinner.setValue((Integer) ogreValue);
-		initValueSpinner.setValue((Double) initValue);
-		alphaValueSpinner.setValue((Double) alphaValue);
-		discountValueSpinner.setValue((Double) discountValue);
-		greedinessValueSpinner.setValue((Double) greedinessValue);
+		ogresSpinner.setValue((Integer) params.getOgreDefaultValue());
+		initValueSpinner.setValue((Double) params.getInitDefaultValue());
+		alphaValueSpinner.setValue((Double) params.getAlphaDefaultValue());
+		discountValueSpinner.setValue((Double) params.getDiscountDefaultValue());
+		greedinessValueSpinner.setValue((Double) params.getGreedinessDefaultValue());
 	}
 	
 	

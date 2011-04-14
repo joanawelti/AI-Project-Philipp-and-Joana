@@ -19,13 +19,6 @@ public class ReinforcementLearnerParameters {
 	private final double discountDefaultValue = 0.9;
 	private final double greedinessDefaultValue = 0.9;
 	
-	/*public ReinforcementLearnerParameters(int nrOgres, double initValue, double alphaValue, double discountFactorValue, double greedinessValue) {
-		this.nrOgres = nrOgres;
-		this.initValue = initValue;
-		this.alphaValue = alphaValue;
-		this.discountFactorValue = discountFactorValue;
-		this.greedinessValue = greedinessValue;
-	} */
 	
 	public int getNrOgres() {
 		return nrOgres;
@@ -94,6 +87,26 @@ public class ReinforcementLearnerParameters {
 		} else {
 			greedinessValue = greedinessDefaultValue;
 		}
+	}
+
+	public int getOgreDefaultValue() {
+		return ogreDefaultValue;
+	}
+
+	public double getInitDefaultValue() {
+		return initDefaultValue;
+	}
+
+	public double getAlphaDefaultValue() {
+		return alphaDefaultValue;
+	}
+
+	public double getDiscountDefaultValue() {
+		return discountDefaultValue;
+	}
+
+	public double getGreedinessDefaultValue() {
+		return greedinessDefaultValue;
 	}
 
 }
