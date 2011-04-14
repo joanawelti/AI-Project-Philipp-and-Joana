@@ -2,8 +2,11 @@ package dungeon.ai.assessment1;
 
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
+import dungeon.ai.actions.ActionPickUp;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
+import dungeon.model.items.treasure.Potion;
+import dungeon.model.items.treasure.Treasure;
 import dungeon.model.structure.LocationHelper;
 
 
@@ -18,6 +21,8 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private final static int REWARD_REACH_EXIT = 10;
 	private final static int REWARD_HIT_ENEMY = 3;
 	private final static int REWARD_KILL_ENEMY = 5;
+	
+	private final static int MAXREWARD = 10;
 
 	/** old and new state */ 
 	private State oldState = null;
@@ -93,6 +98,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		
 		// do your action
 		boolean moved = false;
+		
 		// first check if the creature can attack something,
 		switch( ActionAttack.performActionStatus(fCreature, game)) {
 		case 0:
@@ -102,6 +108,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			// ogre gets reward for having hit an enemy
 			Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
 			moved = true;
+<<<<<<< HEAD
 			break;
 		case 2:
 			// ogre gets reward for having killed an enemy
@@ -114,6 +121,15 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (gotHitByEnemy()) {
 			Qtable.updateTable(PENALTY_HIT_ENEMY, oldState, newState, oldAction);
 		}
+=======
+		} else if (ActionPickUp.performAction(fCreature, game)) {
+			// can ogre pick up something?
+			Qtable.updateTable(calculateRewardForPotion(oldState), oldState, newState, oldAction);
+			moved = true;
+		} else {
+			moved = doAction(newAction,game);
+		}	
+>>>>>>> bb9dcaf928cce899a75ec93047721f4f5460fb5b
 		
 		// save old action 
 		oldAction = newAction;
@@ -132,10 +148,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 				return doAttack(game);
 			case EVADE: 
 				return doEvade(game);
-//			case GET_HEALTH_POTION:
-//				return doGetHealthPotion(game);
-//			case GET_ENERGY_POTION:
-//				return doGetEnergyPotion(game);
+			case GET_HEALTH_POTION:
+				return doGetHealthPotion(game);
+			case GET_ENERGY_POTION:
+				return doGetEnergyPotion(game);
+			case GO_TO_EXIT:
+				return doGoToExit(game);
 			default:
 				return false;
 		}
@@ -197,5 +215,46 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 		}
 		return false;
+	}
+	
+	/**
+	 * Calculates how much reward the creature gets for picking up a potion
+	 * @param game
+	 * @return
+	 */
+	private double calculateRewardForPotion(State state) {
+		double reward = 0;
+		// get last treasure
+		Treasure last = fCreature.getInventory().lastElement();
+		if (last instanceof Potion) {
+			// give reward according to energy level/health level
+			if (((Potion) last).getType() == Potion.POTION_ENERGY) {
+				reward = findDynamicReward(state.getEnergy(), fCreature.getMaxEnergy(), State.ENERGY_SECTION_CNT);
+			} else if (((Potion) last).getType() == Potion.POTION_HEALTH) {
+				reward = findDynamicReward(state.getHealth(), fCreature.getMaxHealth(), State.HEALTH_SECTION_CNT);
+			}
+		}
+		return reward;
+	}
+	
+	/**
+	 * Finds dynamic reward according to the currentLevel and the maximum level possible
+	 * Current level equal to maxLevel gets the lowest reward, where current level equal to zero gets the highest
+	 * reward
+	 * @param currentLevel Current value
+	 * @param maxLevel Max value possible
+	 * @param intervals Number of intervals the value is split in
+	 * @return
+	 */
+	private double findDynamicReward(double currentLevel, double maxLevel, int intervals) {
+		int interval = 0;
+		double intervalsize = maxLevel/intervals;
+		for (int i = 1; i < intervals; i++) {
+			if (currentLevel > i*intervalsize && currentLevel <= (i+1)*intervalsize) {
+				interval = i;
+				break;
+			}
+		}
+		return MAXREWARD - (MAXREWARD/intervals) * (interval + 1);
 	}
 }

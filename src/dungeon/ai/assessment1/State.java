@@ -24,9 +24,9 @@ public class State {
 	private int distanceInterval;
 	
 	/* constant to define in how many section an interval is divided */
-	private static final int ENERGY_SECTION_CNT = 5;
-	private static final int HEALTH_SECTION_CNT = 5;
-	private static final int LENGTH_SECTION_CNT = 5;	
+	public static final int ENERGY_SECTION_CNT = 5;
+	public static final int HEALTH_SECTION_CNT = 5;
+	public static final int LENGTH_SECTION_CNT = 5;	
 	
 	/**
 	 * Creates a new instance of this class, i.e. a state for the provided creature.

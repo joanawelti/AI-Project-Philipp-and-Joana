@@ -7,7 +7,7 @@ import java.util.Random;
  *
  */
 public enum Action {
-	ATTACK, EVADE; //, GET_HEALTH_POTION, GET_ENERGY_POTION;
+	ATTACK, EVADE, GET_HEALTH_POTION, GET_ENERGY_POTION, GO_TO_EXIT;
 	
 	/**
 	 * @return Returns a random action.
@@ -20,7 +20,7 @@ public enum Action {
 	 * @return Returns the default action to be taken.
 	 */
 	public static Action getDefaultAction() {
-		return Action.ATTACK;
+		return Action.GO_TO_EXIT;
 	}
 	
 	/**
@@ -54,10 +54,10 @@ public enum Action {
 			return 0;
 		case EVADE: 
 			return 0;
-//		case GET_HEALTH_POTION:
-//			return 0;
-//		case GET_ENERGY_POTION:
-//			return 0;
+		case GET_HEALTH_POTION:
+			return 0;
+		case GET_ENERGY_POTION:
+			return 0;
 		default:
 			return 0;
 		}
