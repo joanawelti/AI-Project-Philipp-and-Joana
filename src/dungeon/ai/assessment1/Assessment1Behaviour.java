@@ -1,5 +1,7 @@
 package dungeon.ai.assessment1;
 
+import java.awt.geom.Point2D;
+
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
 import dungeon.model.Game;
@@ -128,6 +130,11 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	
 	private boolean doEvade(Game game) {
 		return evadeMovingTarget(game, 1);
+	}
+	
+	private boolean doGoToExit(Game game) {
+		return followTarget(game, new Point2D.Double(game.getMap().getFinish().getArea().getCenterX(), game.getMap().getFinish().getArea().getCenterY()));
+		
 	}
 	
 	private boolean doGetHealthPotion(Game game) {

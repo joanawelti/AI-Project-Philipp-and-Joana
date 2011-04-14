@@ -11,7 +11,6 @@ import dungeon.ui.MapPanel;
 
 public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 	protected Point2D targetPosition = null;
-	Point2D newTargetPosition = null;
 	PathFind followAction = null;
 	protected List<Point2D> wayPoints = null;
 	Creature fCreature = null;
@@ -32,24 +31,44 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 		}
 		return successfulmove;
 	}
+	
+	public boolean followTarget(Game game, Point2D position) {
+		boolean successfulmove = followTarget(game, position);
+		if (!successfulmove) {
+			// we are stuck
+			// need to pathfind with mobs
+			wayPoints = null;
+			followAction.recalcMapWithMobs(game);
+			successfulmove = followTarget(game, position);
+			followAction.recalcMapWithoutMobs(game);
+		}
+		return successfulmove;
+	}
 
 	private boolean followMovingTargetAttempt(Game game, int creatureindex) {
-
+		Point2D position = null;
 		if(creatureindex>-1)
-			newTargetPosition  = game.getCreatures().elementAt(creatureindex)
+			position  = game.getCreatures().elementAt(creatureindex)
 					.getLocation();
 			else
-				newTargetPosition  = game.getHero().getLocation();
+				position  = game.getHero().getLocation();
+		
+		return followTargetAttempt(game, position);
+
+		
+	}
+	
+	private boolean followTargetAttempt(Game game, Point2D position) {
 
 		if (targetPosition == null) {
-			targetPosition =newTargetPosition;
+			targetPosition = position;
 		}
 
 		// if he's moved too far, or we had no path anyway
-		if (targetPosition.distance(newTargetPosition) > 4
+		if (targetPosition.distance(position) > 4
 				|| wayPoints == null) {
-			wayPoints = followAction.findPath(game, newTargetPosition );
-			targetPosition = newTargetPosition;
+			wayPoints = followAction.findPath(game, position );
+			targetPosition = position;
 			fCreature.setGoal(null, game);
 		}
 
@@ -68,21 +87,25 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 	}
 	
 	public boolean evadeMovingTarget(Game game, int creatureindex) {
+		Point2D position = null;
 		if(creatureindex>-1)
-			newTargetPosition  = game.getCreatures().elementAt(creatureindex)
+			position  = game.getCreatures().elementAt(creatureindex)
 					.getLocation();
 			else
-				newTargetPosition  = game.getHero().getLocation();
-
+				position  = game.getHero().getLocation();
+		return evadeTargetAttempt(game, position);
+	}
+	
+	public boolean evadeTargetAttempt(Game game, Point2D position) {
 		if (targetPosition == null) {
-			targetPosition =newTargetPosition;
+			targetPosition = position;
 		}
 
-		if (targetPosition.distance(newTargetPosition) > 4
+		if (targetPosition.distance(position) > 4
 				|| wayPoints == null) {
 			
-			wayPoints = followAction.evadeHazard(game, newTargetPosition);
-			targetPosition = newTargetPosition;
+			wayPoints = followAction.evadeHazard(game, position);
+			targetPosition = position;
 			fCreature.setGoal(null, game);
 		} 
 		
@@ -99,5 +122,7 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 		
 		MapPanel.setPath(wayPoints);
 		return fCreature.moveToGoal(game);
+		
 	}
 }
+

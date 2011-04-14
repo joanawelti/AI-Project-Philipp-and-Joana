@@ -23,6 +23,17 @@ public class Map implements Persistent
 	}
 	private TileList fTiles = new TileList();
 	
+	
+	public Finish getFinish() {
+		Finish tile = null;
+		for (Tile t : getTiles()) {
+			if (t instanceof Finish) {
+				tile = (Finish) t;
+			}
+		} 
+		return tile;
+	}
+	
 	/**
 	 * Returns the bounds for the entire dungeon, including an optional border
 	 * 
