@@ -6,7 +6,7 @@ import java.util.Random;
  * @author Philipp
  *
  */
-enum Action {
+public enum Action {
 	ATTACK, EVADE, GET_HEALTH_POTION, GET_ENERGY_POTION;
 	
 	public static Action getRandomAction() {

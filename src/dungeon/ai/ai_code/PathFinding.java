@@ -94,7 +94,7 @@ public class PathFinding {
 		return waypoints;
 	}
 	
-	public List<Point2D> pathfindAstar(Game game, Point2D goal){
+	public List<Point2D> PathFindAStar(Game game, Point2D goal){
 		System.out.println("called astar");
 		getMap(game);
 		
