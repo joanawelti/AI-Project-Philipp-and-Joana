@@ -109,6 +109,12 @@ public class Game implements Persistent
 	{
 		return fHero;
 	}
+	
+	public boolean isReinforcementLearner() {
+		return fReinforcementLearner;
+	}
+	private boolean fReinforcementLearner = false;
+	
 	/**
 	 * Sets the game's hero
 	 * @param hero The hero
@@ -232,13 +238,14 @@ public class Game implements Persistent
 		XMLHelper.loadObject(node, "Creatures", fCreatures);
 		XMLHelper.loadObject(node, "Treasure", fTreasure);
 		
-		if (XMLHelper.findChild(node, "Hero") != null)
-		{
+		if (XMLHelper.findChild(node, "Hero") != null) {
 			XMLHelper.loadObject(node, "Hero", fHero);
-		}
-		else
-		{
+		} else {
 			fHero = null;
+		}
+		
+		if (XMLHelper.findChild(node, "ReinforcementLearner") != null) {
+			fReinforcementLearner = true;
 		}
 		
 		// Make sure we have all the factions that we're supposed to have
