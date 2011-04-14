@@ -2,6 +2,7 @@ package dungeon.model.structure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D.Double;
 
 import org.w3c.dom.Node;
 
@@ -24,15 +25,6 @@ public class Map implements Persistent
 	private TileList fTiles = new TileList();
 	
 	
-	public Finish getFinish() {
-		Finish tile = null;
-		for (Tile t : getTiles()) {
-			if (t instanceof Finish) {
-				tile = (Finish) t;
-			}
-		} 
-		return tile;
-	}
 	
 	/**
 	 * Returns the bounds for the entire dungeon, including an optional border

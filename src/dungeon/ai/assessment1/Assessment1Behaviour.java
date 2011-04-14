@@ -1,11 +1,11 @@
 package dungeon.ai.assessment1;
 
-import java.awt.geom.Point2D;
-
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
+import dungeon.model.structure.LocationHelper;
+
 
 public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {	
 	/** Constants */ 
@@ -132,17 +132,27 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		return evadeMovingTarget(game, 1);
 	}
 	
+	/**
+	 * Move to exit of dungeon if there is one
+	 */
 	private boolean doGoToExit(Game game) {
-		return followTarget(game, new Point2D.Double(game.getMap().getFinish().getArea().getCenterX(), game.getMap().getFinish().getArea().getCenterY()));
-		
+		return followTarget(game, LocationHelper.getFinishCenter(game.getMap()));
 	}
 	
+	/**
+	 * Go to closest health potion if there are any
+	 **/
 	private boolean doGetHealthPotion(Game game) {
-		return false;
+		// find nearest health potion
+		return followTarget(game, LocationHelper.getClosestHealthPotion(game, fCreature.getLocation()));
 	}
 	
+	/**
+	 * Go to closest energy potion if there are any
+	 */
 	private boolean doGetEnergyPotion(Game game) {
-		return false;
+		// find nearest energy potion
+		return followTarget(game, LocationHelper.getClosestEnergyPotion(game, fCreature.getLocation()));
 	}
 
 

@@ -33,13 +33,13 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 	}
 	
 	public boolean followTarget(Game game, Point2D position) {
-		boolean successfulmove = followTarget(game, position);
+		boolean successfulmove = followTargetAttempt(game, position);
 		if (!successfulmove) {
 			// we are stuck
 			// need to pathfind with mobs
 			wayPoints = null;
 			followAction.recalcMapWithMobs(game);
-			successfulmove = followTarget(game, position);
+			successfulmove = followTargetAttempt(game, position);
 			followAction.recalcMapWithoutMobs(game);
 		}
 		return successfulmove;
@@ -59,6 +59,9 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 	}
 	
 	private boolean followTargetAttempt(Game game, Point2D position) {
+		if (position == null) {
+			return false;
+		}
 
 		if (targetPosition == null) {
 			targetPosition = position;
@@ -97,6 +100,10 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 	}
 	
 	public boolean evadeTargetAttempt(Game game, Point2D position) {
+		if (position == null) {
+			return false;
+		}
+		
 		if (targetPosition == null) {
 			targetPosition = position;
 		}
