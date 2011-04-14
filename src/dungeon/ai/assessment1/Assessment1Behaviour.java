@@ -33,6 +33,9 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	/** creature to do AI for */
 	private Creature fCreature;
 	
+	/** health points of fCreature last tick */
+	private double oldHealth;
+	
 //	/** the Q-table to use */
 //	private Qtable learner = new Qtable();
 
@@ -40,6 +43,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	public Assessment1Behaviour(Creature creature) {
 		super(creature);
 		fCreature = creature;
+		oldHealth = fCreature.getCurrentHealth();
 	}
 	
 	/**
@@ -90,13 +94,26 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		// do your action
 		boolean moved = false;
 		// first check if the creature can attack something,
-		if (ActionAttack.performAction(fCreature, game)) {
-			// ogre gets reward for having hit the hero
+		switch( ActionAttack.performActionStatus(fCreature, game)) {
+		case 0:
+			moved = doAction(newAction,game);
+			break;
+		case 1:
+			// ogre gets reward for having hit an enemy
 			Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
 			moved = true;
-		} else {
-			moved = doAction(newAction,game);
-		}	
+			break;
+		case 2:
+			// ogre gets reward for having killed an enemy
+			Qtable.updateTable(REWARD_KILL_ENEMY, oldState, newState, oldAction);
+			moved = true;
+			break;
+		}
+		
+		// check for other rewards
+		if (gotHitByEnemy()) {
+			Qtable.updateTable(PENALTY_HIT_ENEMY, oldState, newState, oldAction);
+		}
 		
 		// save old action 
 		oldAction = newAction;
@@ -155,6 +172,15 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		return followTarget(game, LocationHelper.getClosestEnergyPotion(game, fCreature.getLocation()));
 	}
 
+	/**
+	 * @return Returns true if the health points decreased since last tick
+	 */
+	private boolean gotHitByEnemy() {
+		boolean flag = (fCreature.getCurrentHealth() < this.oldHealth); 
+		oldHealth = fCreature.getCurrentHealth();
+		return flag;
+	}
+	
 
 	public boolean deathTick(Game game) {
 		Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);

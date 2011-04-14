@@ -38,4 +38,37 @@ public class ActionAttack
 		
 		return false;
 	}
+	
+	/**
+	 * Make the given mob perform an attack if possible
+	 * 
+	 * @param mob The mob
+	 * @param game The current game object
+	 * @return Returns 1 if the mob made an attack, 2 if the attack killed the target, 0 if no attack was made.
+	 */
+	public static int performActionStatus(Mob mob, Game game)
+	{
+		for (Attack attack: mob.getAttacks())
+		{
+			if (mob.getCurrentEnergy() < attack.getEnergyCost())
+				continue;
+			
+			Vector<Mob> targets = mob.findTargets(game, attack);
+			if (targets.size() == 0)
+				continue;
+			
+			// Attack a target
+			Mob target = targets.get(0);
+			attack.useAttack(mob, target);
+			
+			// check if it dies
+			if( target.getCurrentHealth() <= 0) {
+				return 2;
+			} else {
+				return 1;
+			}
+		}
+		
+		return 0;
+	}
 }
