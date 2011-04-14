@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  <Game Name="testing RL" Tournament="true">
+    <Map>
+      <Tiles>
+        <Vector>
+          <Floor Height="50" Width="50" X="0.0" Y="0.0"/>
+          <Door KeyID="-1" State="2" Height="20" Width="20" X="15" Y="15"/>
+         </Vector>
+      </Tiles>
+    </Map>
+  <Creatures>
+    <Vector>
+      <FastOgre CurrentEnergy="50" CurrentHealth="100" Gold="10" X="5" Y="25" Behaviour="dungeon.ai.ReinforcedNeuralNetworkBehavior"  Faction="blue">
+        <Attacks><Vector><Longbow/></Vector></Attacks>
+        <Inventory><Vector/></Inventory>
+      </FastOgre>
+      <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="40" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+        <Attacks><Vector><Smash/></Vector></Attacks>
+        <Inventory><Vector/></Inventory>
+      </Ogre>
+    </Vector>
+  </Creatures>
+  <Treasure>
+  </Treasure>
+  <Hero CurrentEnergy="100" CurrentHealth="100" Gold="0" X="25" Y="85">
+    <Attacks><Vector><Sword/><Longbow/></Vector></Attacks>
+    <Inventory><Vector/></Inventory>
+  </Hero>
+  </Game>

@@ -1,8 +1,6 @@
 package dungeon.ai.assessment1;
 
 import java.util.Random;
-
-import dungeon.model.Game;
 /**
  * 
  * @author Philipp

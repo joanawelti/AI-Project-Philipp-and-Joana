@@ -2,7 +2,6 @@ package dungeon.ai.assessment1;
 
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
-import dungeon.ai.pathfind.PathFindAStar;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 
