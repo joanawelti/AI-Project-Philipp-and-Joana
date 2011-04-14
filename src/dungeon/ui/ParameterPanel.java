@@ -19,7 +19,6 @@ public class ParameterPanel extends JPanel {
 	
 	private static final long serialVersionUID = 5458256289234189978L;
 	
-	private JLabel ogresLabel = null;
 	private JLabel initValueLabel = null;
 	private JLabel alphaLabel = null;
 	private JLabel discountLabel = null;
@@ -27,7 +26,6 @@ public class ParameterPanel extends JPanel {
 	
 	private JButton resetButton = null;
 	
-	private JSpinner ogresSpinner = null;
 	private JSpinner initValueSpinner = null;
 	private JSpinner alphaValueSpinner = null;
 	private JSpinner discountValueSpinner = null;
@@ -37,7 +35,6 @@ public class ParameterPanel extends JPanel {
 	private JPanel content = null;
 	
 	
-	private String ogres = "Number of Ogres";
 	private String init = "Initial Q-Values";
 	private String alpha = "Alpha value";
 	private String discountfactor = "Discount factor";
@@ -45,9 +42,9 @@ public class ParameterPanel extends JPanel {
 	
 	private String title = "Settings";
 	private String reset = "reset";
+	private String set = "set";
 	
 	private ReinforcementLearnerParameters params;
-	
 	
 	
 	public ParameterPanel() {
@@ -66,10 +63,6 @@ public class ParameterPanel extends JPanel {
 		content = new JPanel();
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 		
-		ogresLabel = new JLabel(ogres);
-		model = new SpinnerNumberModel(params.getOgreDefaultValue(), 0, 10, 1);
-		ogresSpinner = new JSpinner(model);
-		
 		initValueLabel = new JLabel(init);
 		model = new SpinnerNumberModel(params.getInitDefaultValue(), 0.00, 1.00, 0.01);
 		initValueSpinner = new JSpinner(model);
@@ -86,8 +79,6 @@ public class ParameterPanel extends JPanel {
 		model = new SpinnerNumberModel(params.getGreedinessDefaultValue(), 0.00, 1.00, 0.01);
 		greedinessValueSpinner = new JSpinner(model);
 		
-		
-		ogresLabel.setLabelFor(ogresSpinner);
 		initValueLabel.setLabelFor(initValueSpinner);
 		alphaLabel.setLabelFor(alphaValueSpinner);
 		discountLabel.setLabelFor(discountValueSpinner);
@@ -96,10 +87,9 @@ public class ParameterPanel extends JPanel {
 		resetButton = new JButton(reset);
 		resetButton.addActionListener(fReset);
 		
+		
 		//Lay out the labels and Spinners in a panel.
-        JPanel labelPane = new JPanel(new GridLayout(5,2));
-        labelPane.add(ogresLabel);
-        labelPane.add(ogresSpinner);
+        JPanel labelPane = new JPanel(new GridLayout(4,2));
         labelPane.add(initValueLabel);
         labelPane.add(initValueSpinner);
         labelPane.add(alphaLabel);
@@ -116,15 +106,6 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	
-	
-	public int getOgreNumber() {
-		return (Integer) ogresSpinner.getValue();
-	}
-	
-	public void setOgreNumber(int number) {
-		ogresSpinner.setValue((Integer) number);
-
-	}
 	
 	public double getInitValue() {
 		return (Double) initValueSpinner.getValue();
@@ -161,8 +142,6 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	public void getAndSetParameterValues(ReinforcementLearnerParameters params) {
-		params.setOgreNumber(getOgreNumber());
-		setOgreNumber(params.getNrOgres());
 		params.setInitValue(getInitValue());
 		setInitValue(params.getInitValue());
 		params.setAlphaValue(getAlphaValue());
@@ -180,8 +159,8 @@ public class ParameterPanel extends JPanel {
 	};
 	
 	
+	
 	private void resetValues() {
-		ogresSpinner.setValue((Integer) params.getOgreDefaultValue());
 		initValueSpinner.setValue((Double) params.getInitDefaultValue());
 		alphaValueSpinner.setValue((Double) params.getAlphaDefaultValue());
 		discountValueSpinner.setValue((Double) params.getDiscountDefaultValue());

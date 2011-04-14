@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <Game Name="Find Exit" Tournament="true">
+	<ReinforcementLearner/>
     <Map>
       <Tiles>
         <Vector>
-          	<Floor Height="25" Width="25" X="0.0" Y="0.0"/>
+          	<Floor Height="25" Width="80" X="0.0" Y="0.0"/>
 			<Floor Height="20" Width="10" X="10.0" Y="25"/>
+			<Floor Height="45" Width="35" X="45" Y="25"/>
 			<Floor Height="25" Width="25" X="0.0" Y="45"/>
-			<Floor Height="40" Width="60" X="0.0" Y="70"/>
+			<Floor Height="40" Width="70" X="0.0" Y="70"/>
           	<Door KeyID="-1" State="2" Height="30" Width="5" X="40" Y="70"/>
-			<Finish Height="10" Width="10" X="60" Y="70"/>
+			<Door KeyID="-1" State="2" Height="10" Width="10" X="55" Y="15"/>
+			<Finish Height="10" Width="10" X="70" Y="70"/>
          </Vector>
       </Tiles>
     </Map>

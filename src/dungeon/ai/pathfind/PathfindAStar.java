@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import dungeon.ai.LineOfSight;
 import dungeon.ai.pathfind.utilities.MappedPoint;
 import dungeon.ai.pathfind.utilities.aStarNode;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
-import dungeon.ui.MapPanel;
 
 public class PathFindAStar extends PathFind{
 
