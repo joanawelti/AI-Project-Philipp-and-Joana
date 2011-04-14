@@ -4,6 +4,8 @@ import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
+import dungeon.model.structure.LocationHelper;
+
 
 public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {	
 	/** Constants */ 
@@ -130,12 +132,27 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		return evadeMovingTarget(game, 1);
 	}
 	
-	private boolean doGetHealthPotion(Game game) {
-		return false;
+	/**
+	 * Move to exit of dungeon if there is one
+	 */
+	private boolean doGoToExit(Game game) {
+		return followTarget(game, LocationHelper.getFinishCenter(game.getMap()));
 	}
 	
+	/**
+	 * Go to closest health potion if there are any
+	 **/
+	private boolean doGetHealthPotion(Game game) {
+		// find nearest health potion
+		return followTarget(game, LocationHelper.getClosestHealthPotion(game, fCreature.getLocation()));
+	}
+	
+	/**
+	 * Go to closest energy potion if there are any
+	 */
 	private boolean doGetEnergyPotion(Game game) {
-		return false;
+		// find nearest energy potion
+		return followTarget(game, LocationHelper.getClosestEnergyPotion(game, fCreature.getLocation()));
 	}
 
 

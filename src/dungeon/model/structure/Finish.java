@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import org.w3c.dom.Node;
 
 import dungeon.App;
+import dungeon.model.items.mobs.FastOgre;
 import dungeon.model.items.mobs.Hero;
 import dungeon.model.items.mobs.Mob;
 import dungeon.utils.Persistent;
@@ -88,7 +89,7 @@ public class Finish extends Tile implements Persistent
 	
 	public void affect(Mob mob)
 	{
-		if (mob instanceof Hero)
+		if (mob instanceof Hero || mob instanceof FastOgre)
 		{
 			if (fLevelChange == 0)
 			{
