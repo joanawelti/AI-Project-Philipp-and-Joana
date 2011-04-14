@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import dungeon.ai.ReinforcementLearnerParameters;
 import dungeon.model.Game;
 import dungeon.model.items.Item;
 import dungeon.model.items.mobs.Movement;
@@ -28,6 +29,8 @@ public class App
 	public final static int SPEED_FAST = 1;
 	public final static int NOGRAPHICS = 0;
 	public  static int gameSpeed=SPEED_NORMAL;
+	
+	
 	/**
 	 * Application entry point
 	 * @param args Command-line arguments
@@ -186,6 +189,7 @@ public class App
 		fMainForm.showLink(item_a, item_b);
 	}
 
+	
 	/**
 	 * Make the game change the level of the current dungeon map
 	 * 

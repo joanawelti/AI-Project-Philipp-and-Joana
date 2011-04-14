@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import dungeon.ai.ReinforcementLearnerParameters;
+
 public class ParameterPanel extends JPanel {
 	
 	private static final long serialVersionUID = 5458256289234189978L;
@@ -22,6 +24,7 @@ public class ParameterPanel extends JPanel {
 	private double alphaValue = 0.5;
 	private double discountValue = 0.9;
 	private double greedinessValue = 0.9;
+	
 	
 	private JLabel ogresLabel = null;
 	private JLabel initValueLabel = null;
@@ -121,29 +124,64 @@ public class ParameterPanel extends JPanel {
 		return (Integer) ogresSpinner.getValue();
 	}
 	
+	public void setOgreNumber(int number) {
+		ogresSpinner.setValue((Integer) number);
+
+	}
+	
 	public double getInitValue() {
-		return (Double) initValueSpinner.getValue(); 
+		return (Double) initValueSpinner.getValue();
+	}
+	
+	public void setInitValue(double value) {
+		initValueSpinner.setValue((Double) value);
 	}
 	
 	public double getAlphaValue() {
 		return (Double) alphaValueSpinner.getValue(); 
 	}
 	
+	public void setAlphaValue(double value) {
+		alphaValueSpinner.setValue((Double) value);
+	}
+	
 	public double getDiscountValue() {
 		return (Double) discountValueSpinner.getValue(); 
+		
+	}
+	
+	public void setDiscountValue(double value) {
+		discountValueSpinner.setValue((Double) value);
 	}
 	
 	public double getGreedinessValue() {
 		return (Double) greedinessValueSpinner.getValue(); 
+		
 	}
 	
+	public void setGreedinessValue(double value) {
+		greedinessValueSpinner.setValue((Double) value);
+	}
 	
+	public void getAndSetParameterValues(ReinforcementLearnerParameters params) {
+		params.setOgreNumber(getOgreNumber());
+		setOgreNumber(params.getNrOgres());
+		params.setInitValue(getInitValue());
+		setInitValue(params.getInitValue());
+		params.setAlphaValue(getAlphaValue());
+		setAlphaValue(params.getAlphaValue());
+		params.setDiscountValue(getDiscountValue());
+		setDiscountValue(params.getDiscountFactorValue());
+		params.setGreedinessValue(getGreedinessValue());
+		setGreedinessValue(params.getGreedinessValue());
+	}
 	
 	ActionListener fReset = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			resetValues();
 		}
 	};
+	
 	
 	private void resetValues() {
 		ogresSpinner.setValue((Integer) ogreValue);

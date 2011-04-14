@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.w3c.dom.Node;
 
 import dungeon.App;
+import dungeon.ai.ReinforcementLearnerParameters;
 import dungeon.collections.CreatureList;
 import dungeon.collections.FactionList;
 import dungeon.collections.TreasureList;
@@ -124,6 +125,15 @@ public class Game implements Persistent
 		fHero = hero;
 	}
 	private Hero fHero = new Hero();
+	
+	public void setParameters(ReinforcementLearnerParameters params) {
+		fParams = params; 
+	}
+	private ReinforcementLearnerParameters fParams = null;
+	
+	public ReinforcementLearnerParameters getParameters() {
+		return fParams;
+	}
 	
 	/**
 	 * Advances the game by one round

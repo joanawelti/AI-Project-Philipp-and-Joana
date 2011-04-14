@@ -558,6 +558,13 @@ public class DungeonForm extends JFrame
 			else
 			{
 				App.getTimer().start();
+				
+				//pass parameters to app if available
+				if (App.getGame().isReinforcementLearner()) {
+					ReinforcementLearnerParameters params = new ReinforcementLearnerParameters();
+					fParameter.getAndSetParameterValues(params);
+					App.getGame().setParameters(params);
+				}
 			}
 			
 			boolean running = App.getTimer().isRunning();
