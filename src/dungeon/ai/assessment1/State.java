@@ -7,7 +7,7 @@ import dungeon.model.items.mobs.Creature;
  * @author Philipp
  *
  */
-class State { 
+public class State { 
 
 	/* Each possible state is assigned a unique number between (including) 0 and getMaxIndex().
 	 * This index is stored in this variable. */
@@ -97,6 +97,7 @@ class State {
 	* @return interval 0 <= interval <= max energy / INTERVALNR
 	*/
 	private static int getIndex(double value, double intervalsize, int intervals) {
+		intervalsize = intervalsize / intervals;
 		int index = 0;
 		for (int i = 1; i < intervals; i++) {
 			if (value > i*intervalsize && value <= (i+1)*intervalsize) {

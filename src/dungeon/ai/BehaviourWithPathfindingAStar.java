@@ -5,7 +5,6 @@ import java.util.List;
 
 import dungeon.ai.pathfind.PathFind;
 import dungeon.ai.pathfind.PathFindAStar;
-import dungeon.ai.pathfind.PathFindDepth;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 import dungeon.ui.MapPanel;
