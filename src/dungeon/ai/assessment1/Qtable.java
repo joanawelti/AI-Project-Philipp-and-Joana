@@ -48,7 +48,8 @@ public class Qtable {
 	 * Initialise Q-table
 	 */
 	private static void init() {
-		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];		
+		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];
+		System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
 		for(int i=0;i<qtable.length;i++) {
 			for(int j=0;j<qtable[0].length;j++) {
 				qtable[i][j] = init_value;
@@ -73,13 +74,20 @@ public class Qtable {
 	 * @return Returns the best action to take for the given state.
 	 */
 	private static Action getBestAction(State state) {
-		double max = Double.MIN_NORMAL;
+		double max = Double.NEGATIVE_INFINITY;
 		int actionIndex = -1;
+		
+//		System.out.println("Qtable lenght = " + qtable[state.getIndex()].length);		
+		
 		for(int i=0;i<qtable[state.getIndex()].length;i++) {
 			if (qtable[state.getIndex()][i] > max) {
 				max = qtable[state.getIndex()][i];
-				actionIndex = i;
+				actionIndex = i;			
 			}
+				//else {
+//		
+//				System.out.println("qtable[state.getIndex()][i] = " + qtable[state.getIndex()][i]);
+//			}
 		}
 		return Action.getAction(actionIndex);
 	}

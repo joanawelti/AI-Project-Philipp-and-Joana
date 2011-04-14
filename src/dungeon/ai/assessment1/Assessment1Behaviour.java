@@ -31,8 +31,8 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	/** creature to do AI for */
 	private Creature fCreature;
 	
-	/** the Q-table to use */
-	private Qtable learner = new Qtable();
+//	/** the Q-table to use */
+//	private Qtable learner = new Qtable();
 
 	
 	public Assessment1Behaviour(Creature creature) {
@@ -45,10 +45,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * @return true if update occurred; false else.
 	 * @return true if fCreature did something; false else.
 	 */
-	public boolean onTick(Game game) {					
+	public boolean onTick(Game game) {		
 		if (newState == null) {
 			// set initial state
 			oldState = new State(game, fCreature);
+			// initialise QTable
+			Qtable.initializeValues(game);
 		}		
 		// get new state
 		newState = new State(game, fCreature);		
@@ -58,17 +60,25 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			ticks += 1;
 			if (ticks > MAXTICKS) {
 				// get next action
-				newAction = learner.getGreedyAction(newState, game);
+				newAction = Qtable.getGreedyAction(newState, game);
+				
+				if (newAction == null) {
+					System.out.println("ohoh2");
+				}
 				
 				// and give penalty because creature was stuck
-				learner.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
+				Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
 			}						
 		} else {						
 			// Update Q-table
-			learner.updateTable(oldAction.getReward(), oldState, newState, oldAction);
+			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);
 			
 			// get appropriate action
-			newAction = learner.getGreedyAction(newState, game);
+			newAction = Qtable.getGreedyAction(newState, game);
+			
+			if (newAction == null) {
+				System.out.println("ohoh1");
+			}
 			
 			oldState = newState;
 			ticks = 0;
@@ -88,24 +98,20 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		// first check if the creature can attack something,
 		if (ActionAttack.performAction(fCreature, game)) {
 			// ogre gets reward for having hit the hero
-			learner.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
+			Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
 			moved = true;
 		} else {
 			moved = doAction(newAction,game);
-		}
-//			
-//		switch (oldAction) {
-//			case 0:
-//				moved = attack(game);
-//				break;
-//			case 1:
-//				moved = evade(game);
-//				break;
-//			}		
+		}	
 		return moved;
 	}
 	
 	public boolean doAction(Action action, Game game) {
+		
+		if (action == null) {
+			System.out.println("ohoh action");
+		}
+		
 		switch (action) {
 			case ATTACK: 
 				return doAttack(game);
@@ -136,11 +142,9 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		return false;
 	}
 
-	/**
-	 * called when ... ???
-	 */
+
 	public boolean deathTick(Game game) {
-		learner.updateTable(PENALTY_DIED, oldState, newState, oldAction);
+		Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 		return false;
 	}
 
@@ -149,9 +153,9 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 */
 	public boolean gameOverTick(Game game) {
 		if (fCreature.getCurrentHealth() > 0) {
-			learner.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
+			Qtable.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
 		} else {
-			learner.updateTable(PENALTY_DIED, oldState, newState, oldAction);
+			Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 		}
 		return false;
 	}

@@ -38,11 +38,11 @@ public class State {
 		setHealth( (double) fCreature.getCurrentHealth() );
 		setEnergy( (double) fCreature.getCurrentEnergy() );
 		setDistanceToEnemy(getMinimumDistanceToEnemy(game, fCreature) );
-		energyInterval = fCreature.getMaxEnergy();
-		healthInterval = fCreature.getMaxHealth();
+		energyInterval = fCreature.getMaxEnergy() / ENERGY_SECTION_CNT;
+		healthInterval = fCreature.getMaxHealth() / HEALTH_SECTION_CNT;
 		distanceInterval = (int) Math.sqrt(
 				Math.pow(game.getMap().getBounds(0).getMaxX() - game.getMap().getBounds(0).getMinX(), 2) + 
-				Math.pow(game.getMap().getBounds(0).getMaxY() - game.getMap().getBounds(0).getMinY(), 2) );
+				Math.pow(game.getMap().getBounds(0).getMaxY() - game.getMap().getBounds(0).getMinY(), 2) ) / LENGTH_SECTION_CNT;
 		setIndex();
 	}
 
@@ -51,7 +51,7 @@ public class State {
 	}
 	
 	public static int getMaxIndex() {
-		return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT - 1;
+		return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT;
 	}
 	
 	/**
@@ -60,11 +60,12 @@ public class State {
 	private void setIndex() {
 		int healthIndex = getIndex( getHealth(), healthInterval, HEALTH_SECTION_CNT);
 		int energyIndex = getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT);
-		int distanceIndex = getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT);		
-		this.index = 
+		int distanceIndex = getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT);
+		int temp =  
 			healthIndex + // health dimension 
-			(energyIndex*energyInterval) + // energy dimension 
-			(distanceIndex*distanceInterval*energyInterval); //distance dimension
+			(energyIndex*ENERGY_SECTION_CNT) + // energy dimension 
+			(distanceIndex*LENGTH_SECTION_CNT*ENERGY_SECTION_CNT); //distance dimension
+		this.index = temp;
 	}
 	
 	public boolean hasNotChanged(State state) {
@@ -97,7 +98,6 @@ public class State {
 	* @return interval 0 <= interval <= max energy / INTERVALNR
 	*/
 	private static int getIndex(double value, double intervalsize, int intervals) {
-		intervalsize = intervalsize / intervals;
 		int index = 0;
 		for (int i = 1; i < intervals; i++) {
 			if (value > i*intervalsize && value <= (i+1)*intervalsize) {
