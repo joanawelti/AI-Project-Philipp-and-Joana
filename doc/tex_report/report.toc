@@ -3,8 +3,10 @@
 \contentsline {section}{\numberline {2}Reinforcement Learning}{3}{section.2}
 \contentsline {subsection}{\numberline {2.1}States}{3}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Actions}{3}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Implementation}{3}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.3}Rewards}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Implementation}{4}{subsection.2.4}
 \contentsline {paragraph}{Qtable.java}{4}{section*.2}
 \contentsline {paragraph}{Action.java}{4}{section*.3}
-\contentsline {subsection}{\numberline {2.4}Graphs}{4}{subsection.2.4}
-\contentsline {section}{\numberline {3}How to play}{4}{section.3}
+\contentsline {paragraph}{State.java}{4}{section*.4}
+\contentsline {subsection}{\numberline {2.5}Graphs}{5}{subsection.2.5}
+\contentsline {section}{\numberline {3}How to run the scenario}{5}{section.3}

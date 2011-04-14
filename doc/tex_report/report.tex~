@@ -50,37 +50,65 @@ Tom can take the following actions:
 
 ''evade close enemies`` lets Tom move directly away from the geometric center of all enemies that are within a certain radius from Tom.
 
+\subsection{Rewards}
+Tm gets the following rewards or penalties
+\begin{center}
+\begin{tabular}{l|l}
+Action & Reward \\
+\hline
+reached exit & +10 \\
+died & -10 \\
+hit enemy & +3 \\
+got hit by enemy & -3 \\
+kill enemy & +5 \\
+used potion & depends \\
+changed state & 0
+\end{tabular}
+\end{center}
+
+''used potion``: rewards depends on how much energy/health Tom regained doing this. TODO: explain in detail \par
+''changed state``: if Tom changed state but didn't achieve anything of the above.
+
 \subsection{Implementation}
 We implemented the reinforcement learning in a rather generic way. \par
 
 \paragraph{Qtable.java}
 This class holds a Q-table to be used in reinforcement learning. As long as Action.java and State.java provide all necessary methods Q-Table is entirely independent on the actual actions or states. It provides a number of methods to update the qtable and retrieve actions: \par
-
-\textit{static void updateTable (double reward, State oldState, State newState, Action oldAction)} updates the Q-table using the given parameters, i.e. in our case the previous state John was in, the current state John is in, the action that led to this state and the reward that is to be assigned for this. \par
-
-\textit{static Action getRandomAction()} returns a random action, i.e. on of those defined in Action.java. \par
-
-\textit{static Action getGreedyAction(State state)} returns to  greediness \% the best, otherwise a random action. \par
+\begin{itemize}
+ \item \textit{static void updateTable (double reward, State oldState, State newState, Action oldAction)} updates the Q-table using the given parameters, i.e. in our case the previous state John was in, the current state John is in, the action that led to this state and the reward that is to be assigned for this.
+ \item \textit{static Action getRandomAction()} returns a random action, i.e. on of those defined in Action.java.
+ \item \textit{static Action getGreedyAction(State state)} returns to  greediness \% the best, otherwise a random action.
+\end{itemize}
 
 \paragraph{Action.java}
 Action.java is a enumeration of all actions that can be taken. See the source code for a description of the methods. \par
 
-
 To add a new action, add the name of that action to the enumeration and assign a reward for this action in \textit{double getReward()}. Also add the actual action in your \textit{doAction(Action action)} method in your behaviour class.
 
 \paragraph{State.java}
-State.java handles the different states needed for reinforcement learning. It provides a number of public methods: \par
+State.java handles the different states needed for reinforcement learning. It provides a number of public methods:
+\begin{itemize}
+ \item \textit{boolean hasNotChanged(State state)} Returns true of this state and state share the same index.
+ \item \textit{int getMaxIndex()} Returns the number of possible different indices.
+ \item \textit{int getIndex()} Returns the index of this state, which is a number between (including) 0 and (excluding) getMaxIndex().
+\end{itemize} 
 
-\textit{boolean hasNotChanged(State state)} Returns true of this state and state share the same index. \par
+To change the states you only need to adapt the following:
+\begin{itemize}
+ \item update getMaxIndex() accordingly.
+ \item update setIndex() accordingly.
+\end{itemize}
 
-\textit{int getMaxIndex()} Returns the number of possible different indices. \par
-
-\textit{int getIndex()} Returns the index of this state, which is a number between (including) 0 and (excluding) getMaxIndex(). \par
-
+(currently the class has much more private variables. However, in fact there is no need (exept for debugging) to store them as only the index matters: reading them from the game, then calculating the index and forgetting about all state variables after this again would be perfectly fine.)
 
 \subsection{Graphs}
 
 
-\section{How to play}
+\section{How to run the scenario}
+
+To run the scenario just run the game and load \textit{findExit.xml}. 
+
+
+
 
 \end{document}

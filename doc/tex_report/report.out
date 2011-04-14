@@ -2,6 +2,7 @@
 \BOOKMARK [1][-]{section.2}{Reinforcement Learning}{}
 \BOOKMARK [2][-]{subsection.2.1}{States}{section.2}
 \BOOKMARK [2][-]{subsection.2.2}{Actions}{section.2}
-\BOOKMARK [2][-]{subsection.2.3}{Implementation}{section.2}
-\BOOKMARK [2][-]{subsection.2.4}{Graphs}{section.2}
-\BOOKMARK [1][-]{section.3}{How to play}{}
+\BOOKMARK [2][-]{subsection.2.3}{Rewards}{section.2}
+\BOOKMARK [2][-]{subsection.2.4}{Implementation}{section.2}
+\BOOKMARK [2][-]{subsection.2.5}{Graphs}{section.2}
+\BOOKMARK [1][-]{section.3}{How to run the scenario}{}
