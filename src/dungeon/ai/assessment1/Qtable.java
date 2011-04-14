@@ -11,33 +11,47 @@ import dungeon.model.Game;
 
 public class Qtable {
 
-	/**
-	 * Constructor for Qtable.
-	 * Automaticcally creates qtable with correct dimensions.
-	 */
-	public Qtable() {
-		super();
-		init();
-	}
 	
-	// constants
-	private final static double GREEDINESS = 0.9;
-	private final static double LEARNING_RATE = 1.0;
-	private final static double DISCOUNT_RATE = 0.9;
+	private static double greediness;
+	private static double learning_rate;
+	private static double discount_rate;
+	
+	private static double init_value;
+	
+	private static boolean initialized = false;
 
 	
 	/** The Q-table: it stores for each pair of action and state the 'value of goodness' of taking 
 	 * this action at this state */
-	private double[][] qtable;
-		
+	private static double[][] qtable;
+	
+	/**
+	 * Set up method for QTable
+	 * Sets Q-Learning parameters according to game's parameters and initializes QTable
+	 * 
+	 * @param game Game for which QTable is used
+	 */
+	public static void initializeValues(Game game) {
+		if (!initialized) {
+			greediness = game.getParameters().getGreedinessValue();
+			learning_rate = game.getParameters().getAlphaValue();
+			discount_rate = game.getParameters().getDiscountFactorValue();
+			init_value = game.getParameters().getInitValue();
+			
+			init();
+			initialized = true;
+		}
+	}
+	
+	
 	/**
 	 * Initialise Q-table
 	 */
-	private void init() {
+	private static void init() {
 		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];		
 		for(int i=0;i<qtable.length;i++) {
 			for(int j=0;j<qtable[0].length;j++) {
-				qtable[i][j] = 0.0;
+				qtable[i][j] = init_value;
 			}
 		}
 	}
@@ -49,16 +63,16 @@ public class Qtable {
 	 * @param newState The current state.
 	 * @param oldAction The previous action.
 	 */
-	public void updateTable (double reward, State oldState, State newState, Action oldAction) {
+	public static void updateTable (double reward, State oldState, State newState, Action oldAction) {
 		qtable[oldState.getIndex()][oldAction.ordinal()] += 
-			LEARNING_RATE * (reward + DISCOUNT_RATE * getBestActionValue(newState) - qtable[oldState.getIndex()][oldAction.ordinal()]);
+			learning_rate * (reward + discount_rate * getBestActionValue(newState) - qtable[oldState.getIndex()][oldAction.ordinal()]);
 	}
 	
 	/**
 	 * Gets the best action to take for the given state.
 	 * @return Returns the best action to take for the given state.
 	 */
-	private Action getBestAction(State state) {
+	private static Action getBestAction(State state) {
 		double max = Double.MIN_NORMAL;
 		int actionIndex = -1;
 		for(int i=0;i<qtable[state.getIndex()].length;i++) {
@@ -74,18 +88,18 @@ public class Qtable {
 	 * Gets a random action
 	 * @return Returns a random action to take
 	 */
-	private Action getRandomAction() {
+	private static Action getRandomAction() {
 		return Action.getRandomAction();
 	}
 	
 	/**
-	 * Does to GREEDINESS % the best, otherwise a random action
+	 * Does to greediness % the best, otherwise a random action
 	 * @param state The current state we are in
 	 * @return Returns the taken action.
 	 */
-	public Action getGreedyAction(State state, Game game) {
+	public static Action getGreedyAction(State state, Game game) {
 		java.util.Random generator = new java.util.Random();
-		if( generator.nextDouble() < GREEDINESS ) {
+		if( generator.nextDouble() < greediness ) {
 			return getBestAction(state);
 		} else {
 			return getRandomAction();
@@ -96,7 +110,7 @@ public class Qtable {
 	 * @param state The current state.
 	 * @return The value of the best action for the current state.
 	 */
-	private double getBestActionValue(State state) {
+	private static double getBestActionValue(State state) {
 		double max = Double.MIN_NORMAL;
 		for(int i=0;i<qtable[state.getIndex()].length;i++) {
 			if (qtable[state.getIndex()][i] > max) {
@@ -106,7 +120,7 @@ public class Qtable {
 		return max;
 	}
 	
-	private double getValue(State state, Action action) {
+	private static double getValue(State state, Action action) {
 		return qtable[state.getIndex()][action.ordinal()];
 	}
 }
