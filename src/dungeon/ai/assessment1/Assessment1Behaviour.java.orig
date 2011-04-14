@@ -12,7 +12,7 @@ import dungeon.model.structure.LocationHelper;
 
 public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {	
 	/** Constants */ 
-	private final int MAXTICKS = 200;	
+	private final int MAXTICKS = 20;	
 	
 	private final static int PENALTY_STUCK = -1;
 	private final static int PENALTY_DIED = -10;
@@ -98,35 +98,38 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		
 		// do your action
 		boolean moved = false;
-
-		if (ActionPickUp.performAction(fCreature, game)) {
-			// can ogre pick up something?
-			Qtable.updateTable(calculateRewardForPotion(oldState), oldState, newState, oldAction);
+		
+		// first check if the creature can attack something,
+		switch( ActionAttack.performActionStatus(fCreature, game)) {
+		case 0:
+			moved = doAction(newAction,game);
+			break;
+		case 1:
+			// ogre gets reward for having hit an enemy
+			Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
 			moved = true;
-		} else {
-			// check if the creature can attack something,
-			switch( ActionAttack.performActionStatus(fCreature, game)) {
-			case 0:
-				// if not hit anyone, do your action
-				moved = doAction(newAction,game);
-				break;
-			case 1:
-				// ogre gets reward for having hit an enemy
-				Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
-				moved = true;
-				break;
-			case 2:
-				// ogre gets reward for having killed an enemy
-				Qtable.updateTable(REWARD_KILL_ENEMY, oldState, newState, oldAction);
-				moved = true;
-				break;
-			}
+<<<<<<< HEAD
+			break;
+		case 2:
+			// ogre gets reward for having killed an enemy
+			Qtable.updateTable(REWARD_KILL_ENEMY, oldState, newState, oldAction);
+			moved = true;
+			break;
 		}
 		
 		// check for other rewards
 		if (gotHitByEnemy()) {
 			Qtable.updateTable(PENALTY_HIT_ENEMY, oldState, newState, oldAction);
 		}
+=======
+		} else if (ActionPickUp.performAction(fCreature, game)) {
+			// can ogre pick up something?
+			Qtable.updateTable(calculateRewardForPotion(oldState), oldState, newState, oldAction);
+			moved = true;
+		} else {
+			moved = doAction(newAction,game);
+		}	
+>>>>>>> bb9dcaf928cce899a75ec93047721f4f5460fb5b
 		
 		// save old action 
 		oldAction = newAction;
