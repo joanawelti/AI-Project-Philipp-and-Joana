@@ -4,7 +4,7 @@ import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 
 /**
- * @author Philipp
+ * @author Philipp, Joana
  *
  */
 public class State { 
@@ -46,10 +46,17 @@ public class State {
 		setIndex();
 	}
 
+	/**
+	 * @return Returns the index of this state.
+	 */
 	public int getIndex() {
 		return index;
 	}
 	
+	/**
+	 * All possible indices of an instance of State are in the interval [0,getMaxIndex()) (including 0, excluding getMaxIndex()). 
+	 * @return Returns the number of possible different indices. 
+	 */
 	public static int getMaxIndex() {
 		//return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT;
 		return ENERGY_SECTION_CNT * LENGTH_SECTION_CNT;
@@ -73,6 +80,11 @@ public class State {
 		(distanceIndex*ENERGY_SECTION_CNT); //distance dimension			
 	}
 	
+	/**
+	 * @param state The state to check against.
+	 * @return Returns true if both states are the same, i.e. they map to the same index, i.e.
+	 * this methods returns true iff state.getIndex() == this.getIndex().
+	 */
 	public boolean hasNotChanged(State state) {
 		return state.getIndex() == this.getIndex();
 	}

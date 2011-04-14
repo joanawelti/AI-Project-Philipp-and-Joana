@@ -5,7 +5,7 @@ import dungeon.model.Game;
 /**
  * Generic class for a q-table used by reinforcement learning.
  * 
- * @author Philipp
+ * @author Philipp, Joana
  *
  */
 
@@ -68,22 +68,6 @@ public class Qtable {
 		qtable[oldState.getIndex()][oldAction.ordinal()] += 
 			learning_rate * (reward + discount_rate * getBestActionValue(newState) - qtable[oldState.getIndex()][oldAction.ordinal()]);
 	}
-
-	/**
-	 * Gets the best action to take for the given state.
-	 * @return Returns the best action to take for the given state.
-	 */
-//	private static Action getBestAction(State state) {
-//		double max = Double.NEGATIVE_INFINITY;
-//		int actionIndex = -1;
-//		for(int i=0;i<qtable[state.getIndex()].length;i++) {
-//			if (qtable[state.getIndex()][i] > max) {
-//				max = qtable[state.getIndex()][i];
-//				actionIndex = i;			
-//			}
-//		}
-//		return Action.getAction(actionIndex);
-//	}
 	
 	/**
 	 * Gets the best action to take for the given state.
@@ -112,12 +96,12 @@ public class Qtable {
 	 * Gets a random action
 	 * @return Returns a random action to take
 	 */
-	static Action getRandomAction() {
+	public static Action getRandomAction() {
 		return Action.getRandomAction();
 	}
 	
 	/**
-	 * Does to greediness % the best, otherwise a random action
+	 * Return to greediness % the best, otherwise a random action
 	 * @param state The current state we are in
 	 * @return Returns the taken action.
 	 */

@@ -9,10 +9,16 @@ import java.util.Random;
 public enum Action {
 	ATTACK, EVADE; //, GET_HEALTH_POTION, GET_ENERGY_POTION;
 	
+	/**
+	 * @return Returns a random action.
+	 */
 	public static Action getRandomAction() {
 		return getAction(new Random().nextInt(Action.getNumberOfActions()));
 	}
 	
+	/**
+	 * @return Returns the default action to be taken.
+	 */
 	public static Action getDefaultAction() {
 		return Action.ATTACK;
 	}
