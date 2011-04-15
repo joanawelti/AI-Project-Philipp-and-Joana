@@ -29,7 +29,7 @@ The normal weapon used by John is the longbow, as this allows him to attack with
 The learning techniques we decided to employ is reinforcement learning. 
 
 \subsection{States}
-We use the following state variables, all of which are devided into 5 equidistant intervals:
+We use the following state variables, all of which are divided into 5 equidistant intervals:
 \begin{itemize}
  \item health points of Tom
  \item energy points of Tom
@@ -46,7 +46,7 @@ Tom can take the following actions:
  \item get and use closest energy potion
 \end{itemize}
 
-''closest`` in this context means absolut distance and ''not distance to walk``. \par
+''closest`` in this context means absolute distance and ''not distance to walk``. \par
 
 ''evade close enemies`` lets Tom move directly away from the geometric center of all enemies that are within a certain radius from Tom.
 
@@ -61,7 +61,7 @@ died & -10 \\
 hit enemy & +3 \\
 got hit by enemy & -3 \\
 kill enemy & +5 \\
-used potion & depends \\
+used potion & depends on current health/energy \\
 changed state & 0
 \end{tabular}
 \end{center}

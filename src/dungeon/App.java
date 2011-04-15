@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
-import dungeon.ai.ReinforcementLearnerParameters;
 import dungeon.model.Game;
 import dungeon.model.items.Item;
 import dungeon.model.items.mobs.Movement;

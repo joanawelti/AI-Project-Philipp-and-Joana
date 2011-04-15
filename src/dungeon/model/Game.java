@@ -5,10 +5,11 @@ import java.util.Vector;
 import org.w3c.dom.Node;
 
 import dungeon.App;
-import dungeon.ai.ReinforcementLearnerParameters;
 import dungeon.collections.CreatureList;
 import dungeon.collections.FactionList;
 import dungeon.collections.TreasureList;
+import dungeon.configuration.ConfigurationHandler;
+import dungeon.configuration.Configurations;
 import dungeon.model.items.mobs.Creature;
 import dungeon.model.items.mobs.Faction;
 import dungeon.model.items.mobs.Hero;
@@ -111,10 +112,6 @@ public class Game implements Persistent
 		return fHero;
 	}
 	
-	public boolean isReinforcementLearner() {
-		return fReinforcementLearner;
-	}
-	private boolean fReinforcementLearner = false;
 	
 	/**
 	 * Sets the game's hero
@@ -126,13 +123,19 @@ public class Game implements Persistent
 	}
 	private Hero fHero = new Hero();
 	
-	public void setParameters(ReinforcementLearnerParameters params) {
-		fParams = params; 
+	public boolean hasConfigurations() {
+		return (fConfigurations != null);
 	}
-	private ReinforcementLearnerParameters fParams = null;
+	private Configurations fConfigurations;
 	
-	public ReinforcementLearnerParameters getParameters() {
-		return fParams;
+	private ConfigurationHandler configHandler = new ConfigurationHandler();
+	
+	public void setConfigurations(Configurations config) {
+		fConfigurations = config; 
+	}
+	
+	public Configurations getConfigurations() {
+		return fConfigurations;
 	}
 	
 	/**
@@ -254,8 +257,9 @@ public class Game implements Persistent
 			fHero = null;
 		}
 		
-		if (XMLHelper.findChild(node, "ReinforcementLearner") != null) {
-			fReinforcementLearner = true;
+		if (XMLHelper.findChild(node, "Configurations") != null) {
+			XMLHelper.loadObject(node, "Configurations", configHandler);
+			setConfigurations(configHandler.getConfigurations());
 		}
 		
 		// Make sure we have all the factions that we're supposed to have

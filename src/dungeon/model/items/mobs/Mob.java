@@ -21,6 +21,7 @@ import dungeon.model.combat.Attack;
 import dungeon.model.items.Item;
 import dungeon.model.items.treasure.Gold;
 import dungeon.model.items.treasure.Key;
+import dungeon.model.items.treasure.Potion;
 import dungeon.model.items.treasure.Treasure;
 import dungeon.model.structure.Door;
 import dungeon.model.structure.Tile;
@@ -434,6 +435,20 @@ public abstract class Mob extends Item implements Persistent
 			fInventory.remove(treasure);
 		
 		// We don't log anything here, the treasure item will take care of that
+	}
+	
+	/**
+	 * Returns the last element of the mobs inventory if this is a potion
+	 * 
+	 * @return last Element of Inventory if Potion or else null
+	 */
+	public Potion getLastElementIfPotion() {
+		Potion lastPotion = null;
+		Treasure last = getInventory().lastElement();
+		if (last instanceof Potion) {
+			lastPotion = (Potion) last;
+		}
+		return lastPotion;
 	}
 	
 	/**

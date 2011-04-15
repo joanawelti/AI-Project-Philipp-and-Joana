@@ -20,7 +20,12 @@ public class Qtable {
 	
 	private static boolean initialized = false;
 
-	
+	// mappings from parameters to parameter keys as used in the configuration 
+	private static int initKey  = 0;
+	private static int learning_rateKey = 1;
+	private static int discount_rateKey = 2;
+	private static int greedinessKey = 3;
+		
 	/** The Q-table: it stores for each pair of action and state the 'value of goodness' of taking 
 	 * this action at this state */
 	private static double[][] qtable;
@@ -33,10 +38,10 @@ public class Qtable {
 	 */
 	public static void initializeValues(Game game) {
 		if (!initialized) {
-			greediness = game.getParameters().getGreedinessValue();
-			learning_rate = game.getParameters().getAlphaValue();
-			discount_rate = game.getParameters().getDiscountFactorValue();
-			init_value = game.getParameters().getInitValue();
+			greediness = game.getConfigurations().getParameters().get(greedinessKey);
+			learning_rate = game.getConfigurations().getParameters().get(learning_rateKey);
+			discount_rate = game.getConfigurations().getParameters().get(discount_rateKey);
+			init_value = game.getConfigurations().getParameters().get(initKey);
 			
 			init();
 			initialized = true;

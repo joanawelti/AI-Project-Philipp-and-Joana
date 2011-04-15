@@ -347,15 +347,8 @@ public class DungeonForm extends JFrame
 					fMapPanel.setGame(game);
 					fInfo.updateInfo();
 					
-					// if game is a reinforcement learner problem, display settings dialog
-					if (game.isReinforcementLearner()) {
-						fParameter.setContentToVisible(true);
-					} else {
-						System.out.println("remove");
-						fParameter.setContentToVisible(false);
-					}
-					fParameter.repaint();
-					
+					// display settings if game has configurations
+					fParameter.setContent();					
 			    }
 			}
 			catch (Exception ex)
@@ -560,10 +553,8 @@ public class DungeonForm extends JFrame
 				App.getTimer().start();
 				
 				//pass parameters to app if available
-				if (App.getGame().isReinforcementLearner()) {
-					ReinforcementLearnerParameters params = new ReinforcementLearnerParameters();
-					fParameter.getAndSetParameterValues(params);
-					App.getGame().setParameters(params);
+				if (App.getGame().hasConfigurations()) {
+					App.getGame().getConfigurations().setParameters(fParameter.getParameterValues());
 				}
 			}
 			

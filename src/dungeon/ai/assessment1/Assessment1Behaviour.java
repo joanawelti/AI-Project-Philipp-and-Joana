@@ -102,6 +102,8 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (ActionPickUp.performAction(fCreature, game)) {
 			// can ogre pick up something?
 			Qtable.updateTable(calculateRewardForPotion(oldState), oldState, newState, oldAction);
+			// use potion right away
+			usePotionIfAny();
 			moved = true;
 		} else {
 			// check if the creature can attack something,
@@ -222,12 +224,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private double calculateRewardForPotion(State state) {
 		double reward = 0;
 		// get last treasure
-		Treasure last = fCreature.getInventory().lastElement();
-		if (last instanceof Potion) {
+		Potion last = fCreature.getLastElementIfPotion();
+		if (last != null) {
 			// give reward according to energy level/health level
-			if (((Potion) last).getType() == Potion.POTION_ENERGY) {
+			if (last.getType() == Potion.POTION_ENERGY) {
 				reward = findDynamicReward(state.getEnergy(), fCreature.getMaxEnergy(), State.ENERGY_SECTION_CNT);
-			} else if (((Potion) last).getType() == Potion.POTION_HEALTH) {
+			} else if (last.getType() == Potion.POTION_HEALTH) {
 				reward = findDynamicReward(state.getHealth(), fCreature.getMaxHealth(), State.HEALTH_SECTION_CNT);
 			}
 		}
@@ -253,5 +255,13 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			}
 		}
 		return MAXREWARD - (MAXREWARD/intervals) * (interval + 1);
+	}
+	
+	
+	private void usePotionIfAny() {
+		Potion potion = fCreature.getLastElementIfPotion();
+		if (potion != null) {
+			fCreature.consume(potion);
+		}
 	}
 }
