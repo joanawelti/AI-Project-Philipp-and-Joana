@@ -10,16 +10,23 @@ public class ConfigurationHandler implements Persistent {
 	
 	private Configurations configurations;
 	
+	/**
+	 * 
+	 * @return configuration
+	 */
 	public Configurations getConfigurations() {
 		return this.configurations;
 	}
 	
+	/**
+	 * Loads the configuration class as specified in the XML file
+	 */
 	public void load(Node node) {		
 		if (XMLHelper.attributeExists(node, "Type")) {
 			String class_name = XMLHelper.getStrValue(node, "Type");
 			
 			try {
-				Class<?> c = Class.forName("dungeon.configuration." + class_name + "Configurations");
+				Class<?> c = Class.forName("dungeon.configuration." + class_name);
 				
 				if (Class.forName("dungeon.configuration.Configurations").isAssignableFrom(c)) {
 					Configurations params = (Configurations)c.newInstance();

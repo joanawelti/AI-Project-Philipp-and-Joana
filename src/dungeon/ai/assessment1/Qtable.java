@@ -1,5 +1,8 @@
 package dungeon.ai.assessment1;
 
+import java.util.HashMap;
+
+import dungeon.configuration.ReinforcementLearnerConfigurations;
 import dungeon.model.Game;
 
 /**
@@ -38,11 +41,18 @@ public class Qtable {
 	 */
 	public static void initializeValues(Game game) {
 		if (!initialized) {
-			greediness = game.getConfigurations().getParameters().get(greedinessKey);
-			learning_rate = game.getConfigurations().getParameters().get(learning_rateKey);
-			discount_rate = game.getConfigurations().getParameters().get(discount_rateKey);
-			init_value = game.getConfigurations().getParameters().get(initKey);
-			
+			HashMap<Integer, Double> configs;
+			// get configured values if set
+			if (game.hasConfigurations()) {
+				configs = game.getConfigurations().getParameters();
+			} else {
+				configs = new ReinforcementLearnerConfigurations().getDefaultValues();
+			}	
+			greediness = configs.get(greedinessKey);
+			learning_rate = configs.get(learning_rateKey);
+			discount_rate = configs.get(discount_rateKey);
+			init_value = configs.get(initKey);
+				
 			init();
 			initialized = true;
 		}

@@ -257,6 +257,7 @@ public class Game implements Persistent
 			fHero = null;
 		}
 		
+		// does this scenario want to provide configuration options?
 		if (XMLHelper.findChild(node, "Configurations") != null) {
 			XMLHelper.loadObject(node, "Configurations", configHandler);
 			setConfigurations(configHandler.getConfigurations());

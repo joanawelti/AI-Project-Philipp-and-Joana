@@ -5,6 +5,9 @@ import java.util.HashMap;
 
 public class ReinforcementLearnerConfigurations extends Configurations {
 	
+	/**
+	 * currently used values
+	 */
 	private double initValue;
 	private double alphaValue;
 	private double discountFactorValue;
@@ -14,16 +17,25 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 	private final double fractionMin = 0.0;
 	private final double interval = 0.01;
 	
+	/**
+	 * default values
+	 */
 	private final double initDefaultValue = 0.01;
 	private final double alphaDefaultValue = 0.5;
 	private final double discountDefaultValue = 0.9;
 	private final double greedinessDefaultValue = 0.9;
 	
+	/**
+	 * Labels for the parameters
+	 */
 	private final String initLabel = "Initial Q-Values";
 	private final String alphaLabel = "Alpha value";
 	private final String discountfactorLabel = "Discount factor";
 	private final String greedinessLabel = "Greediness";
 	
+	/**
+	 * keys for each parameter
+	 */
 	private final int init = 0;
 	private final int alpha = 1;
 	private final int discountfactor = 2;
@@ -34,27 +46,10 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 	private HashMap<Integer, Double> parameters;
 	
 	
-	/*public double getInitValue() {
-		return initValue;
-	}
-	
-	
-	public double getAlphaValue() {
-		return alphaValue;
-	}
-	
-	
-	public double getDiscountFactorValue() {
-		return discountFactorValue;
-	}
-	
-	
-	public double getGreedinessValue() {
-		return greedinessValue;
-	}*/
-	
-	
-	
+	/**
+	 * Sets init to value if it is a legal value, otherwise it is set to default value
+	 * @param value for init value
+	 */
 	private void setInitValue(double value) {
 		if (value < fractionMax && value > fractionMin) {
 			initValue = value;
@@ -63,7 +58,10 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 		}
 	}
 	
-	
+	/**
+	 * Sets alpha to value if it is a legal value, otherwise it is set to default value
+	 * @param value for alpha 
+	 */
 	private void setAlphaValue(double value) {
 		if (value < fractionMax && value > fractionMin) {
 			alphaValue = value;
@@ -72,7 +70,10 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 		}
 	}
 
-	
+	/**
+	 * Sets discount factor to value if it is a legal value, otherwise it is set to default value
+	 * @param value for discount factor
+	 */
 	private void setDiscountValue(double value) {
 		if (value < fractionMax && value > fractionMin) {
 			discountFactorValue = value;
@@ -81,7 +82,10 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 		}
 	}
 	
-	
+	/**
+	 * Sets greediness to value if it is a legal value, otherwise it is set to default value
+	 * @param value for greediness
+	 */
 	private void setGreedinessValue(double value) {
 		if (value < fractionMax && value > fractionMin) {
 			greedinessValue = value;
@@ -89,23 +93,7 @@ public class ReinforcementLearnerConfigurations extends Configurations {
 			greedinessValue = greedinessDefaultValue;
 		}
 	}
-
-	/*public double getInitDefaultValue() {
-		return initDefaultValue;
-	}
-
-	public double getAlphaDefaultValue() {
-		return alphaDefaultValue;
-	}
-
-	public double getDiscountDefaultValue() {
-		return discountDefaultValue;
-	}
-
-	public double getGreedinessDefaultValue() {
-		return greedinessDefaultValue;
-	}*/
-
+	
 	@Override
 	public HashMap<Integer, Double> getParameters() {
 		return this.parameters;

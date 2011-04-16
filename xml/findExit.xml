@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <Game Name="Find Exit" Tournament="true">
-	<Configurations Type="ReinforcementLearner"/>
+	<Configurations Type="ReinforcementLearnerConfigurations"/>
     <Map>
       <Tiles>
         <Vector>

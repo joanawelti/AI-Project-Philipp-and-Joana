@@ -254,7 +254,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 				break;
 			}
 		}
-		return MAXREWARD - (MAXREWARD/intervals) * (interval + 1);
+		return MAXREWARD/2 - (MAXREWARD/intervals) * interval;
 	}
 	
 	
