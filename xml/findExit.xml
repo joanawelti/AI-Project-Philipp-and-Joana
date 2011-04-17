@@ -25,6 +25,14 @@
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
       </Ogre>
+	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="60" Y="10" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+        <Attacks><Vector><Smash/></Vector></Attacks>
+        <Inventory><Vector/></Inventory>
+      </Ogre>
+	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="10" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+        <Attacks><Vector><Smash/></Vector></Attacks>
+        <Inventory><Vector/></Inventory>
+      </Ogre>
     </Vector>
   </Creatures>
   <Treasure>

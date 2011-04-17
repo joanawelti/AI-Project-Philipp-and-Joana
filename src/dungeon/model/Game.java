@@ -95,6 +95,7 @@ public class Game implements Persistent
 	}
 	private CreatureList fCreatures = new CreatureList();
 	
+	
 	/**
 	 * @return Returns the list of treasure items in the dungeon
 	 */
