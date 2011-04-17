@@ -136,8 +136,9 @@ To change the states, you only need to adapt the following:
 (currently the class has much more private variables. However, in fact there is no need (except for debugging) to store them as only the index matters: reading them from the game, then calculating the index and forgetting about all state variables after this again would be perfectly fine.)
 
 \subsubsection{Visualisation of the learning}
-To visualize how the behaviour of the John improves, the percentage of the games won out of the last 50 rounds is displayed.
+To visualize how the behaviour of the John improves, the percentage of the games won out of the last 20 rounds is displayed.
 
+Also, this percentage is written to the \verb|results/results.txt| file, which can be used to produce a graph or other visual output.
 
 \subsubsection{Graphs}
 % TODO: what is x/y axis?
