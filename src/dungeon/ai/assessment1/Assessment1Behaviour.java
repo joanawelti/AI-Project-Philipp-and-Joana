@@ -13,8 +13,8 @@ import dungeon.model.structure.LocationHelper;
 
 public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {	
 	/** Constants */ 
-	private final int MAXTICKS = 50;	
-	private final int STUCK_RADIUS = 25;
+	private final int MAXTICKS = 20;	
+	private final int STUCK_RADIUS = 8;
 	
 	private final static int PENALTY_STUCK = -2;
 	private final static int PENALTY_DIED = -10;
@@ -90,7 +90,6 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			debugOut("not changed", newState, oldState, newAction, oldAction, oldAction.getReward());
 
 			oldState = newState;
-			ticks = 0;
 		}
 
 		// if action changed
@@ -279,6 +278,10 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * @return Returns true if creature seems to be stuck; false else.
 	 */
 	private boolean isStuck() {
+		if ( stuckPos.distance(fCreature.getLocation()) > STUCK_RADIUS) {
+			ticks = 0;
+			stuckPos = fCreature.getLocation();
+		}
 		if (ticks > MAXTICKS && stuckPos.distance(fCreature.getLocation()) < STUCK_RADIUS) {
 			ticks = 0;
 			stuckPos = fCreature.getLocation();

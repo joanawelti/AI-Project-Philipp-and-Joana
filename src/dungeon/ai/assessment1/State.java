@@ -140,12 +140,20 @@ public class State {
 	* @return interval 0 <= interval <= max energy / INTERVALNR
 	*/
 	private static int getIndex(double value, double intervalsize, int maxIndex) {
+//		int i=0;
+//		while(value > (i+1)*intervalsize) {
+//			i++;
+//		}
+//		return (i>maxIndex?maxIndex:i);
+//		
+		// quadratic interval length
+		double fitFactor = intervalsize/maxIndex;
 		int i=0;
-		while(value > (i+1)*intervalsize) {
+		while(value >Math.pow(i+1,2)*fitFactor) {
 			i++;
 		}
-		return (i>maxIndex?maxIndex:i);
-		
+		//System.out.println(Math.pow(i+1,2)*fitFactor);
+		return (i>maxIndex-1?maxIndex-1:i);
 	}	
 
 	public double getHealth() {
