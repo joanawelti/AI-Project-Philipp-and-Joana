@@ -84,10 +84,10 @@ public class State {
 	 * Sets the index of this state depending on the current values of the state variables.
 	 */
 	private void setIndex() {
-		healthIndex = getIndex( getHealth(), healthInterval);
-		energyIndex = getIndex( getEnergy(), energyInterval);
-		distanceToEnemyIndex = getIndex( getDistanceToEnemy(), distanceToEnemyInterval);
-		distanceToGoalIndex = getIndex( getDistanceToGoal(), distanceToGoalInterval);
+		healthIndex = getIndex( getHealth(), healthInterval,HEALTH_SECTION_CNT);
+		energyIndex = getIndex( getEnergy(), energyInterval,ENERGY_SECTION_CNT);
+		distanceToEnemyIndex = getIndex( getDistanceToEnemy(), distanceToEnemyInterval,DISTANCE_ENEMY_SECTION_CNT);
+		distanceToGoalIndex = getIndex( getDistanceToGoal(), distanceToGoalInterval,DISTANCE_GOAL_SECTION_CNT);
 		
 //		this.index = 
 //		(energyIndex) + // energy dimension 
@@ -139,12 +139,12 @@ public class State {
 	* @param intervals number of intervals
 	* @return interval 0 <= interval <= max energy / INTERVALNR
 	*/
-	private static int getIndex(double value, double intervalsize) {
+	private static int getIndex(double value, double intervalsize, int maxIndex) {
 		int i=0;
 		while(value > (i+1)*intervalsize) {
 			i++;
 		}
-		return i;
+		return (i>maxIndex?maxIndex:i);
 		
 	}	
 
