@@ -186,7 +186,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	}
 	
 	private boolean doEvade(Game game) {
-		return evadeMovingTarget(game, 1);
+		return evadeAllTargetsInRoom(game, fCreature.getID(), game.getMap().getTileAt(fCreature.getLocation()));
 	}
 	
 	/**

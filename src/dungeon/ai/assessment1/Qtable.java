@@ -13,7 +13,6 @@ import dungeon.model.Game;
  */
 
 public class Qtable {
-
 	
 	private static double greediness;
 	private static double learning_rate;

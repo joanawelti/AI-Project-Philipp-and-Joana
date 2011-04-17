@@ -444,9 +444,11 @@ public abstract class Mob extends Item implements Persistent
 	 */
 	public Potion getLastElementIfPotion() {
 		Potion lastPotion = null;
-		Treasure last = getInventory().lastElement();
-		if (last instanceof Potion) {
-			lastPotion = (Potion) last;
+		if (! getInventory().isEmpty()) {
+			Treasure last = getInventory().lastElement();
+			if (last instanceof Potion) {
+				lastPotion = (Potion) last;
+			}
 		}
 		return lastPotion;
 	}

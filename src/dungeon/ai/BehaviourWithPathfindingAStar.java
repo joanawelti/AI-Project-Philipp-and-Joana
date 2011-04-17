@@ -1,12 +1,16 @@
 package dungeon.ai;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.rmi.server.UID;
 import java.util.List;
+import java.util.UUID;
 
 import dungeon.ai.pathfind.PathFind;
 import dungeon.ai.pathfind.PathFindAStar;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
+import dungeon.model.structure.Tile;
 import dungeon.ui.MapPanel;
 
 public abstract class BehaviourWithPathfindingAStar implements Behaviour {
@@ -96,6 +100,45 @@ public abstract class BehaviourWithPathfindingAStar implements Behaviour {
 					.getLocation();
 			else
 				position  = game.getHero().getLocation();
+		return evadeTargetAttempt(game, position);
+	}
+	
+	/**
+	 * 
+	 * @param game
+	 * @param creatureID
+	 * @param currentTile
+	 * @return
+	 */
+	public boolean evadeAllTargetsInRoom(Game game, UUID creatureID, Tile currentTile) {
+		Point2D position = null;
+		double x = 0;
+		double y = 0;
+		double x_alt = 0;
+		double y_alt = 0;
+		int count = 0;
+		int alt_count = 0;
+		// get all positions of creatures in currentTile
+		for (Creature creature : game.getCreatures()) {
+			if (creature.getID() != creatureID) {
+				if (game.getMap().getTileAt(creature.getLocation()) == currentTile) {
+					x += creature.getLocation().getX();
+					y += creature.getLocation().getY();
+					count += 1;
+				} else {
+					// run away from average of all other creatures
+					x_alt += creature.getLocation().getX();
+					y_alt += creature.getLocation().getY();
+					alt_count += 1;
+				}
+			}	
+		}
+		if (count > 0) {
+			position = new Point2D.Double(x/count, y/count);
+		} else if (alt_count > 0) {
+			position = new Point2D.Double(x_alt/alt_count, y_alt/alt_count);
+		}
+		
 		return evadeTargetAttempt(game, position);
 	}
 	
