@@ -244,6 +244,7 @@ public class Game implements Persistent
 				Tile maybeFinish = this.getMap().getTileAt(m.getLocation());
 				if (m instanceof FastOgre && finish.equals(maybeFinish)) {
 					m.gameOverTick(this);
+					App.finishTournament(m.getFaction());
 				}
 			}					
 		}

@@ -208,8 +208,10 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	
 
 	public boolean deathTick(Game game) {
+		System.out.println("dead");
 		Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 		WinCounter.setWinLos(false);
+		WinCounter.out();
 		return false;
 	}
 
@@ -217,6 +219,8 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * called when game over
 	 */
 	public boolean gameOverTick(Game game) {
+		System.out.println("game over");
+
 		if (fCreature.getCurrentHealth() > 0) {
 			Qtable.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
 			WinCounter.setWinLos(true);
@@ -224,6 +228,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 			WinCounter.setWinLos(false);
 		}
+
 		WinCounter.out();
 		return false;
 	}
@@ -301,7 +306,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * debugging output
 	 */
 	private void debugOut(String msg, State newState, State oldState, Action newAction, Action oldAction, double reward){
-		System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
-				+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
+		//System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
+		//		+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
 	}	
 }

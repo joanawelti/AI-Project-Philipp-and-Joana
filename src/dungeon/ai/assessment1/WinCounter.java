@@ -1,13 +1,18 @@
 package dungeon.ai.assessment1;
 
-import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.DecimalFormat;
 
 public class WinCounter {
 	
-	/** vector to count how many of the last 50games have been won */
-	private final static int WIN_LOSE_RANGE = 50;
+	/** vector to count how many of the last 20 games have been won */
+	private final static int WIN_LOSE_RANGE = 20;
 	private static boolean[] won = null;
 	private static int count = 0;	
+	
+	private static final String file = "results/results.txt";
 
 	/**
 	 * init the array to calc percentage of won games. 
@@ -18,8 +23,18 @@ public class WinCounter {
 			for(int i=0;i<won.length;i++) {
 				won[i] = false;
 			}
+			// create output file
+			try{
+				File results = new File(file);
+			    if (results.exists())
+			    	results.delete();
+			    results.createNewFile();
+	         } catch(Exception e){
+	            System.err.println(e.toString());
+	         }   
 		}		
 	}
+	
 	
 	/**
 	 * Store if last game was won or lost. 
@@ -41,10 +56,26 @@ public class WinCounter {
 				cnt++;
 			}
 		}
-		return ((double)cnt)/WIN_LOSE_RANGE;
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return Double.valueOf(twoDForm.format(((double)cnt)/WIN_LOSE_RANGE * 100));
 	}
 	
 	public static void out() {
-		System.out.println("Percentage of won games our of last " + WinCounter.WIN_LOSE_RANGE + " games = " + WinCounter.getPercentageWon() + "%");
+		if (count == WIN_LOSE_RANGE - 1) {
+			Double percentageWon = WinCounter.getPercentageWon();
+			System.out.println("Percentage of won games out of last " + WinCounter.WIN_LOSE_RANGE + " games = " + percentageWon + "%");
+			
+			// write results to file
+	        try{
+	            FileWriter out = new FileWriter(file, true);
+	            BufferedWriter writer = new BufferedWriter(out);
+	            writer.write(percentageWon.toString());
+	            writer.newLine();
+	            writer.close();
+	            out.close();
+	         } catch(Exception e){
+	            System.err.println(e.toString());
+	         }   
+		} 
 	}
 }
