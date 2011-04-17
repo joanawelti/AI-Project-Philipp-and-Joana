@@ -9,6 +9,7 @@
 %opening
 \title{Report for Assessment 1 \\ \large{of CS3616}}
 \author{Joana Welti, Philipp Lucas}
+\date{April, 2011}
 
 \begin{document}
 
@@ -39,7 +40,7 @@ The normal weapon used by John is the longbow, as this allows him to attack with
 \section{Reinforcement Learning}\label{sec:rl}
 The learning techniques we decided to employ is reinforcement learning. Reinforced learning allows actors to learn what actions to take when being in a certain state based on rewards or penalties they got earlier on.
 
-% TODO: why
+We decided to use reinforcement learning because we provide different actions to take and John should learn which of them is appropriate for a specific action. Reinforced learning achieves exactly this behaviour with the help of the rewards/penalties, without having the user to play and train the game first. John is also able to find out the goal of the game by himself in a completely automated way with this technique. 
 
 \subsection{States}
 We use the following state variables:
@@ -134,6 +135,9 @@ To change the states, you only need to adapt the following:
 
 (currently the class has much more private variables. However, in fact there is no need (except for debugging) to store them as only the index matters: reading them from the game, then calculating the index and forgetting about all state variables after this again would be perfectly fine.)
 
+\subsubsection{Visualisation of the learning}
+To visualize how the behaviour of the John improves, the percentage of the games won out of the last 50 rounds is displayed.
+
 
 \subsubsection{Graphs}
 
@@ -165,7 +169,7 @@ Every behaviour that is customizable needs to have a class in this package that 
 
 
 \section{How to run the scenario}\label{sec:instructions}
-To run the scenario, start the game and load the \textit{findExit.xml} file. Change any configuration values if needed and click on start.  
+To run the scenario, start the game and load the \verb|findExit.xml| file. \verb|findExit.xml| can be found in the \verb|xml| folder.  Change any configuration values if needed on the settings pannel and click on start.  
 
 
 
