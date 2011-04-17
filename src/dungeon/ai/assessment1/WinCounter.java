@@ -6,7 +6,7 @@ public class WinCounter {
 	
 	/** vector to count how many of the last 50games have been won */
 	private final static int WIN_LOSE_RANGE = 50;
-	private static ArrayList<Boolean> won = null;
+	private static boolean[] won = null;
 	private static int count = 0;	
 
 	/**
@@ -14,9 +14,9 @@ public class WinCounter {
 	 */
 	public static void init() {
 		if( won == null) {
-			won = new ArrayList<Boolean>(WIN_LOSE_RANGE);
-			for(int i=0;i<won.size();i++) {
-				won.set(i, false);
+			won = new boolean[WIN_LOSE_RANGE];
+			for(int i=0;i<won.length;i++) {
+				won[i] = false;
 			}
 		}		
 	}
@@ -26,7 +26,7 @@ public class WinCounter {
 	 * @param winLose false for lost, true for won.
 	 */
 	public static void setWinLos(boolean winLose) {
-		won.set(count, winLose);
+		won[count] = winLose;
 		count++;
 		count%=WIN_LOSE_RANGE;
 	}
@@ -36,8 +36,8 @@ public class WinCounter {
 	 */
 	public static double getPercentageWon() {
 		int cnt = 0;
-		for(int i=0;i<won.size();i++) {
-			if (won.get(i)) {
+		for(int i=0;i<won.length;i++) {
+			if (won[i]) {
 				cnt++;
 			}
 		}
