@@ -16,7 +16,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private final int MAXTICKS = 50;	
 	private final int STUCK_RADIUS = 25;
 	
-	private final static int PENALTY_STUCK = -1;
+	private final static int PENALTY_STUCK = -2;
 	private final static int PENALTY_DIED = -10;
 	private final static int PENALTY_HIT_ENEMY = -3;
 	
@@ -74,44 +74,25 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			//newAction = Qtable.getRandomAction();
 
 			// and give penalty because creature was stuck
-			Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
+			Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);			
+			debugOut("stuck", newState, oldState, newAction, oldAction, PENALTY_STUCK);
+
 		}		
 
 
-		// check is state changed
+		// check if state changed
 		if( !oldState.hasNotChanged(newState) ) {						
 			// Update Q-table
 			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);
 
 			// get appropriate action
 			newAction = Qtable.getGreedyAction(newState, game);
+			debugOut("not changed", newState, oldState, newAction, oldAction, oldAction.getReward());
 
 			oldState = newState;
 			ticks = 0;
 		}
 
-		//		if( oldState.hasNotChanged(newState) ){
-//			ticks += 1;
-//			if (ticks > MAXTICKS) {
-//				// get next action
-//				newAction = Qtable.getGreedyAction(newState, game);
-//				//newAction = Qtable.getRandomAction();
-//				
-//				// and give penalty because creature was stuck
-//				Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
-//				ticks = 0;
-//			}						
-//		} else {						
-//			// Update Q-table
-//			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);
-//			
-//			// get appropriate action
-//			newAction = Qtable.getGreedyAction(newState, game);
-//			
-//			oldState = newState;
-//			ticks = 0;
-//		}	
-		
 		// if action changed
 		if (newAction != oldAction) {
 			// and recalculate paths
@@ -125,6 +106,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (ActionPickUp.performAction(fCreature, game)) {
 			// can ogre pick up something?
 			Qtable.updateTable(calculateRewardForPotion(oldState), oldState, newState, oldAction);
+			debugOut("pickup",newState, oldState, oldAction, oldAction, calculateRewardForPotion(oldState));
 			// use potion right away
 			usePotionIfAny();
 			moved = true;
@@ -138,11 +120,13 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			case 1:
 				// ogre gets reward for having hit an enemy
 				Qtable.updateTable(REWARD_HIT_ENEMY, oldState, newState, oldAction);
+				debugOut("hit enemy", newState, oldState, oldAction, oldAction, REWARD_HIT_ENEMY);
 				moved = true;
 				break;
 			case 2:
 				// ogre gets reward for having killed an enemy
 				Qtable.updateTable(REWARD_KILL_ENEMY, oldState, newState, oldAction);
+				debugOut("kill enemy", newState, oldState, oldAction, oldAction, REWARD_KILL_ENEMY);
 				moved = true;
 				break;
 			}
@@ -151,6 +135,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		// check for other rewards
 		if (gotHitByEnemy()) {
 			Qtable.updateTable(PENALTY_HIT_ENEMY, oldState, newState, oldAction);
+			debugOut("hit by enemy", newState, oldState, oldAction, oldAction, PENALTY_HIT_ENEMY);
 		}
 		
 		// save old action 
@@ -297,11 +282,18 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (ticks > MAXTICKS && stuckPos.distance(fCreature.getLocation()) < STUCK_RADIUS) {
 			ticks = 0;
 			stuckPos = fCreature.getLocation();
-
 			return true;
 		} else {
 			ticks++;
 			return false;
 		}		
+	}
+	
+	/**
+	 * debugging output
+	 */
+	private void debugOut(String msg, State newState, State oldState, Action newAction, Action oldAction, double reward){
+		System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
+				+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
 	}
 }

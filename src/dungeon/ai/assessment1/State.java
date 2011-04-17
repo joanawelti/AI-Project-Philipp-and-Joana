@@ -101,8 +101,8 @@ public class State {
 		this.index = 
 		healthIndex + // health dimension 
 		(energyIndex*HEALTH_SECTION_CNT) + // energy dimension 
-		(distanceToEnemyInterval*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT) + //distance to enemy dimension
-		(distanceToGoalInterval*DISTANCE_ENEMY_SECTION_CNT*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance to goal dimension
+		(distanceToEnemyIndex*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT) + //distance to enemy dimension
+		(distanceToGoalIndex*DISTANCE_ENEMY_SECTION_CNT*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance to goal dimension
 	}
 	
 	/**
