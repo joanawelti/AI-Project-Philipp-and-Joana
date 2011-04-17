@@ -34,7 +34,7 @@ The project includes a new scenario, which is described in section~\ref{sec:scen
 \section{Scenario}\label{sec:scenario}
 In our scenario there is one fast ogre (let's call him John) in fraction ``blue`` and a variable number of slower creatures in fraction ''yellow``. The primary goal of the fast ogre is to escape from the dungeon by reaching the exit. For this it is not necessary to kill all the enemies however it might become necessary to fight against some of them as they block the way out.
 
-The normal weapon used by John is the longbow, as this allows him to attack without being attacked himself. In addition he can decide to pickup use potions to regain health or energy.
+The normal weapon used by John is the longbow, as this allows him to attack without being attacked himself. In addition he can decide to pickup and use potions to regain health or energy.
 
 \section{Reinforcement Learning}\label{sec:rl}
 The learning techniques we decided to employ is reinforcement learning. Reinforced learning allows actors to learn what actions to take when being in a certain state based on rewards or penalties he got earlier on.
@@ -44,13 +44,13 @@ The learning techniques we decided to employ is reinforcement learning. Reinforc
 \subsection{States}
 We use the following state variables, all of which are divided into 5 equidistant intervals:
 \begin{itemize}
- \item health points of Tom % TODO: John?
- \item energy points of Tom
- \item distance between Tom and closest enemy
+ \item health points of John
+ \item energy points of John
+ \item distance between John and closest enemy
 \end{itemize}
 
 \subsection{Actions}
-Tom can take the following actions:
+John can take the following actions:
 \begin{itemize}
  \item attack closest enemy
  \item evade close enemies
@@ -61,7 +61,7 @@ Tom can take the following actions:
 
 ''closest`` in this context means absolute distance and ''not distance to walk``.
 
-''evade close enemies`` lets Tom move directly away from the geometric center of all enemies that are within a certain radius from Tom.
+''evade close enemies`` lets John move directly away from the geometric center of all enemies that are within a certain radius from John.
 
 \subsection{Rewards}
 Tm gets the following rewards or penalties
@@ -80,20 +80,20 @@ changed state & 0
 \end{center}
 
 \minisec{''reached exit`` and ``died''Rewards}
-Reaching the exit and dying are the two ends of the spectrum, so Tom gets the biggest reward/penalty respectively.
+Reaching the exit and dying are the two ends of the spectrum, so John gets the biggest reward/penalty respectively.
 
 \minisec{''hit enemy`` and ``got hit by enemy'' Rewards}
-Killing all the monsters is not the main objective, so Tom only gets a small reward for hitting any enemies.
+Killing all the monsters is not the main objective, so John only gets a small reward for hitting any enemies.
 
 \minisec{''used potion`` Rewards}
-The reward Tom gets for picking up an health potion depends on his current health. He gets the most points when his health level is low. As getting to the exit is the goal of the game, he gets a slight penalty when he picks up a potion although he's health level is good and he wouldn't need one. 
+The reward John gets for picking up an health potion depends on his current health. He gets the most points when his health level is low. As getting to the exit is the goal of the game, he gets a slight penalty when he picks up a potion although he's health level is good and he wouldn't need one. 
 For health levels in between he gets a gradual amount of reward. 
-With this reward system, we want to train Tom to pick up health potions when he needs them in order to win the game.
+With this reward system, we want to train John to pick up health potions when he needs them in order to win the game.
  
 The same rules apply also for energy potions. 
 
 \minisec{''changed state`` Rewards}
-When Tom changes state but doesn't achieve anything listed above, he doesn't get any reward or penalty. 
+When John changes state but doesn't achieve anything listed above, he doesn't get any reward or penalty. 
 
 
 \section{Implementation}\label{sec:implementation}

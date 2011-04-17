@@ -17,16 +17,25 @@ public class State {
 	private double health;	// 1st dimension
 	private double energy; // 2nd dimension
 	private double distanceToEnemy; // 3rd dimension
+	private double distanceToGoal; // 4th dimension
 	
 	/* interval sizes (difference between lowest and highest value) */
 	private int energyInterval;
 	private int healthInterval;
-	private int distanceInterval;
+	private int distanceToEnemyInterval;
+	private int distanceToGoalInterval;
+	
+	/* indices */
+	private int healthIndex;
+	private int energyIndex;
+	private int distanceToEnemyIndex;
+	private int distanceToGoalIndex;
 	
 	/* constant to define in how many section an interval is divided */
 	public static final int ENERGY_SECTION_CNT = 5;
 	public static final int HEALTH_SECTION_CNT = 5;
-	public static final int LENGTH_SECTION_CNT = 5;	
+	public static final int DISTANCE_ENEMY_SECTION_CNT = 5;
+	public static final int DISTANCE_GOAL_SECTION_CNT = 5;
 	
 	/**
 	 * Creates a new instance of this class, i.e. a state for the provided creature.
@@ -35,14 +44,20 @@ public class State {
 	 */
 	public State(Game game, Creature fCreature) {
 		super();		
+		// get state variable values
 		setHealth( (double) fCreature.getCurrentHealth() );
 		setEnergy( (double) fCreature.getCurrentEnergy() );
 		setDistanceToEnemy(getMinimumDistanceToEnemy(game, fCreature) );
+		
+		// get interval lengths
 		energyInterval = fCreature.getMaxEnergy() / ENERGY_SECTION_CNT;
 		healthInterval = fCreature.getMaxHealth() / HEALTH_SECTION_CNT;
-		distanceInterval = (int) Math.sqrt(
+		distanceToEnemyInterval = (int) Math.sqrt(
 				Math.pow(game.getMap().getBounds(0).getMaxX() - game.getMap().getBounds(0).getMinX(), 2) + 
-				Math.pow(game.getMap().getBounds(0).getMaxY() - game.getMap().getBounds(0).getMinY(), 2) ) / LENGTH_SECTION_CNT;
+				Math.pow(game.getMap().getBounds(0).getMaxY() - game.getMap().getBounds(0).getMinY(), 2) ) / DISTANCE_ENEMY_SECTION_CNT;
+		distanceToGoalInterval = distanceToEnemyInterval;
+		
+		// calculate indices
 		setIndex();
 	}
 
@@ -58,26 +73,33 @@ public class State {
 	 * @return Returns the number of possible different indices. 
 	 */
 	public static int getMaxIndex() {
-		//return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * LENGTH_SECTION_CNT;
-		return ENERGY_SECTION_CNT * LENGTH_SECTION_CNT;
+		return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * DISTANCE_ENEMY_SECTION_CNT * DISTANCE_GOAL_SECTION_CNT;
+		//return ENERGY_SECTION_CNT * DISTANCE_ENEMY_SECTION_CNT;
 	}
 	
 	/**
 	 * Sets the index of this state depending on the current values of the state variables.
 	 */
 	private void setIndex() {
-		int healthIndex = getIndex( getHealth(), healthInterval, HEALTH_SECTION_CNT);
-		int energyIndex = getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT);
-		int distanceIndex = getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT); 
-			
+		healthIndex = getIndex( getHealth(), healthInterval, HEALTH_SECTION_CNT);
+		energyIndex = getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT);
+		distanceToEnemy = getIndex( getDistanceToEnemy(), distanceToEnemyInterval, DISTANCE_ENEMY_SECTION_CNT);
+		distanceToGoal = getIndex( getDistanceToGoal(), distanceToGoalInterval, DISTANCE_GOAL_SECTION_CNT);
+		
+//		this.index = 
+//		(energyIndex) + // energy dimension 
+//		(distanceIndex*ENERGY_SECTION_CNT); //distance dimension	
+		
 //		this.index = 
 //			healthIndex + // health dimension 
 //			(energyIndex*HEALTH_SECTION_CNT) + // energy dimension 
-//			(distanceIndex*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance dimension
-
+//			(distanceIndex*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance dimension		
+		
 		this.index = 
-		(energyIndex) + // energy dimension 
-		(distanceIndex*ENERGY_SECTION_CNT); //distance dimension			
+		healthIndex + // health dimension 
+		(energyIndex*HEALTH_SECTION_CNT) + // energy dimension 
+		(distanceToEnemyInterval*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT) + //distance to enemy dimension
+		(distanceToGoalInterval*DISTANCE_ENEMY_SECTION_CNT*ENERGY_SECTION_CNT*HEALTH_SECTION_CNT); //distance to goal dimension
 	}
 	
 	/**
@@ -152,9 +174,19 @@ public class State {
 	@Override
 	public String toString() {
 		String out = "";
-		out += "energy = " + getEnergy() + " ~ " + getIndex( getEnergy(), energyInterval, ENERGY_SECTION_CNT) + "\n" +
-		       "distance = " + getDistanceToEnemy() + " ~ " + getIndex( getDistanceToEnemy(), distanceInterval, LENGTH_SECTION_CNT);
+		out += "energy = " + getEnergy() + " ~ " + energyIndex + "\n" +
+		       "health = " + getHealth() + " ~ " + healthIndex + "\n" +
+		       "distance to goal = " + getDistanceToGoal() + " ~ " + distanceToGoalIndex +
+			   "distance to enemy = " + getDistanceToEnemy() + " ~ " + distanceToEnemyIndex;
 		return out;
+	}
+
+	public double getDistanceToGoal() {
+		return distanceToGoal;
+	}
+
+	public void setDistanceToGoal(double distanceToGoal) {
+		this.distanceToGoal = distanceToGoal;
 	}	
 }
 
