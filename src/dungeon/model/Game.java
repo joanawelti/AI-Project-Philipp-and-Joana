@@ -138,6 +138,7 @@ public class Game implements Persistent
 	public Configurations getConfigurations() {
 		return fConfigurations;
 	}
+
 	
 	/**
 	 * Advances the game by one round

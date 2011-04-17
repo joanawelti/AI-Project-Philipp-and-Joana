@@ -53,4 +53,5 @@ public abstract class Configurations {
 	 * @return maximums
 	 */
 	public abstract HashMap<Integer, Double> getParameterMax();
+	
 }

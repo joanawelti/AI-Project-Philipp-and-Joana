@@ -175,6 +175,7 @@ public class InfoPanel extends JTextPane
 			str += "</TD>";
 			str += "</TR>";
 			
+			
 			str += "</TABLE>";
 			str += "</P>";
 			
@@ -270,7 +271,8 @@ public class InfoPanel extends JTextPane
 		else
 		{
 			str += "<P align=center>(no hero)</P>";
-		}
+			
+		} 
 		
 		setText(str);
 	}
