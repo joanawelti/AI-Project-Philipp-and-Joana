@@ -12,9 +12,12 @@ import dungeon.configuration.ConfigurationHandler;
 import dungeon.configuration.Configurations;
 import dungeon.model.items.mobs.Creature;
 import dungeon.model.items.mobs.Faction;
+import dungeon.model.items.mobs.FastOgre;
 import dungeon.model.items.mobs.Hero;
 import dungeon.model.items.mobs.Mob;
 import dungeon.model.items.treasure.Treasure;
+import dungeon.model.structure.Finish;
+import dungeon.model.structure.LocationHelper;
 import dungeon.model.structure.Map;
 import dungeon.model.structure.Tile;
 import dungeon.utils.Persistent;
@@ -230,10 +233,19 @@ public class Game implements Persistent
 			Vector<Mob> mobs = new Vector<Mob>();
 			mobs.addAll(fCreatures);
 			for (Mob m: mobs)
-					m.gameOverTick(this);
-			
-
+					m.gameOverTick(this);	
 			App.finishTournament(factions.get(0));
+		} else {
+			// check if any creature is on exit field
+			Vector<Mob> mobs = new Vector<Mob>();
+			mobs.addAll(fCreatures);
+			Finish finish = LocationHelper.getFinish(this.getMap());
+			for (Mob m: mobs) {				
+				Tile maybeFinish = this.getMap().getTileAt(m.getLocation());
+				if (m instanceof FastOgre && finish.equals(maybeFinish)) {
+					m.gameOverTick(this);
+				}
+			}					
 		}
 	}
 
