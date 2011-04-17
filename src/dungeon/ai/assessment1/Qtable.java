@@ -63,7 +63,7 @@ public class Qtable {
 	 */
 	private static void init() {
 		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];
-		System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
+		//System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
 		for(int i=0;i<qtable.length;i++) {
 			for(int j=0;j<qtable[0].length;j++) {
 				qtable[i][j] = init_value;
@@ -79,6 +79,8 @@ public class Qtable {
 	 * @param oldAction The previous action.
 	 */
 	public static void updateTable (double reward, State oldState, State newState, Action oldAction) {
+//		System.out.println("# Update :  [old State = " + oldState.getIndex() + "]  [new State = " 
+//				+ newState.getIndex() +  "]  [old Action = " + oldAction + "]  [reward = " + reward + "]");
 		qtable[oldState.getIndex()][oldAction.ordinal()] += 
 			learning_rate * (reward + discount_rate * getBestActionValue(newState) - qtable[oldState.getIndex()][oldAction.ordinal()]);
 	}
