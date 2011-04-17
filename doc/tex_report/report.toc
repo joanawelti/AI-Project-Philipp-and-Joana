@@ -12,7 +12,7 @@
 \contentsline {paragraph}{State.java}{5}{section*.4}
 \contentsline {subsubsection}{\numberline {4.1.1}Visualisation of the learning}{6}{subsubsection.4.1.1}
 \contentsline {subsubsection}{\numberline {4.1.2}Graphs}{6}{subsubsection.4.1.2}
-\contentsline {subsection}{\numberline {4.2}Configuration functionality}{6}{subsection.4.2}
-\contentsline {subsubsection}{\numberline {4.2.1}Usage}{6}{subsubsection.4.2.1}
-\contentsline {subsubsection}{\numberline {4.2.2}Implementation}{6}{subsubsection.4.2.2}
-\contentsline {section}{\numberline {5}How to run the scenario}{7}{section.5}
+\contentsline {subsection}{\numberline {4.2}Configuration functionality}{7}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Usage}{7}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Implementation}{7}{subsubsection.4.2.2}
+\contentsline {section}{\numberline {5}How to run the scenario}{8}{section.5}

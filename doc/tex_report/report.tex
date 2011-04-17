@@ -140,6 +140,102 @@ To visualize how the behaviour of the John improves, the percentage of the games
 
 
 \subsubsection{Graphs}
+% TODO: what is x/y axis?
+
+\begin{figure}[htp]
+\centering
+%\includegraphics{}
+\caption{}\label{fig:randomness_90_ogres_2}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+%\includegraphics{}
+\caption{}\label{fig:randomness_99_ogres_2}
+\end{figure}
+
+
+\begin{figure}[htp]
+\centering
+%\includegraphics{}
+\caption{}\label{fig:randomness_90_ogres_3}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+%\includegraphics{}
+\caption{}\label{fig:randomness_99_3}
+\end{figure}
+
+
+\minisec{Setup}
+Common configurations for all figures: 
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Initialization values for Q-Table} & 0.01 \\
+\hline
+\textbf{Alpha values} & 0.5 \\
+\hline
+\textbf{Discount factor} & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+
+Figure~\ref{fig:randomness_90_ogres_2}:
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Number of Ogres} & 2 \\
+\hline
+\textbf{Greediness} & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+
+Figure~\ref{fig:randomness_90_ogres_3}:
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Number of Ogres} & 3 \\
+\hline
+\textbf{Greediness} & 0.9 \\
+\hline
+\end{tabular}
+\end{center}
+
+Figure~\ref{fig:randomness_99_ogre_2}:
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Number of Ogres} & 2 \\
+\hline
+\textbf{Greediness} & 0.99 \\
+\hline
+\hline
+\end{tabular}
+\end{center}
+
+Figure~\ref{fig:randomness_99_ogre_3}:
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Number of Ogres} & 3 \\
+\hline
+\textbf{Greediness} & 0.99 \\
+\hline
+\end{tabular}
+\end{center}
+
+\minisec{Interpretation}
+% TODO: write something about the included graphs. What do the graphs say?
+
+Clearly, randomness is not only a blessing in our scenario. We need some randomness to make John explore the world and to actually find out what his goal is, but once he's won a couple of times, he shouldn't take too many random actions. Because we have quite a few actions and also quite a few enemy ogres for this small world, one wrong action can mean the death of John. 
+
+% TODO: is this correct?
+Figure~\ref{fig:randomness_99_ogre_2} and \ref{fig:randomness_99_ogre_3} show that John performs much better with a higher greediness factor, which means that he chooses less random actions.
+
+Unfortunately, John doesn't win every time, even after having trained for 2000 games. We would have to investigate this issue further to draw a valid conclusion from this fact. 
 
 \subsection{Configuration functionality}
 Our configuration functionality makes it possible for a scenario to have configuration options. The GUI provides a settings panel where the adjustable parameters are displayed and can be changed by the user during run time.

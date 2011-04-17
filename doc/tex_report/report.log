@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.4.8)  17 APR 2011 16:09
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.4.8)  17 APR 2011 19:54
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -421,31 +421,54 @@ Overfull \hbox (3.55637pt too wide) in paragraph at lines 111--113
 he Q-table us-ing the given para-
  []
 
-[5] [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 177.
- [7]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 177.
+[5]
+
+LaTeX Warning: Reference `fig:randomness_99_ogre_2' on page 6 undefined on inpu
+t line 207.
+
+
+LaTeX Warning: Reference `fig:randomness_99_ogre_3' on page 6 undefined on inpu
+t line 219.
+
+[6]
+
+LaTeX Warning: Reference `fig:randomness_99_ogre_2' on page 7 undefined on inpu
+t line 236.
+
+
+LaTeX Warning: Reference `fig:randomness_99_ogre_3' on page 7 undefined on inpu
+t line 236.
+
+[7]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 273.
+ [8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 273.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 177.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 273.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 657AD7E72D9038365FD3C62E1FBF5CFA;862.
+
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 7449 strings out of 493774
- 113822 string characters out of 3145363
- 220270 words of memory out of 3000000
- 10609 multiletter control sequences out of 15000+200000
- 6202 words of font info for 23 fonts, out of 3000000 for 9000
+ 7463 strings out of 493774
+ 114046 string characters out of 3145363
+ 220362 words of memory out of 3000000
+ 10617 multiletter control sequences out of 15000+200000
+ 6510 words of font info for 24 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 37i,6n,43p,529b,382s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></
-usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><
-/usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
-usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (7 pages, 97358 bytes).
+ 37i,6n,43p,529b,386s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
+/usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></u
+sr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></
+usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
+sr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on report.pdf (8 pages, 116261 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
- 26 named destinations out of 1000 (max. 500000)
+ 156 PDF objects out of 1000 (max. 8388607)
+ 31 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 

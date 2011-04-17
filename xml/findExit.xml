@@ -29,10 +29,10 @@
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
       </Ogre>
-	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="5" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+	  <!--Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="5" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
-      </Ogre>
+      </Ogre-->
     </Vector>
   </Creatures>
   <Treasure>

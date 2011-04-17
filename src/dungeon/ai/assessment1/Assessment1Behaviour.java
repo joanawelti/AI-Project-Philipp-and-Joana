@@ -208,7 +208,6 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	
 
 	public boolean deathTick(Game game) {
-		System.out.println("dead");
 		Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
 		WinCounter.setWinLos(false);
 		WinCounter.out();
@@ -219,8 +218,6 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * called when game over
 	 */
 	public boolean gameOverTick(Game game) {
-		System.out.println("game over");
-
 		if (fCreature.getCurrentHealth() > 0) {
 			Qtable.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
 			WinCounter.setWinLos(true);
