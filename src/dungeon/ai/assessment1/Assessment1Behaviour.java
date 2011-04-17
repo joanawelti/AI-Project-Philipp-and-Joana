@@ -1,6 +1,8 @@
 package dungeon.ai.assessment1;
 
 import java.awt.geom.Point2D;
+import java.util.LinkedList;
+import java.util.List;
 
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
@@ -43,13 +45,19 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	
 	/** health points of fCreature last tick */
 	private double oldHealth;
-
+	
+	/** store last 50 results of game */
+	private static LinkedList<Boolean> wins = new LinkedList<Boolean>();
+	private final static int WIN_GAME_COUNTER = 50;
 	
 	public Assessment1Behaviour(Creature creature) {
 		super(creature);
 		fCreature = creature;
 		oldHealth = fCreature.getCurrentHealth();
 		stuckPos = fCreature.getLocation();
+		for(int i=0;i<WIN_GAME_COUNTER;i++){
+			wins.add(false);
+		}
 	}
 	
 	/**
@@ -211,15 +219,21 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		return false;
 	}
 
+	
 	/**
 	 * called when game over
 	 */
 	public boolean gameOverTick(Game game) {
 		if (fCreature.getCurrentHealth() > 0) {
 			Qtable.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
+			wins.addLast(true);
+			wins.removeFirst();
 		} else {
 			Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
+			wins.addLast(false);
+			wins.removeFirst();
 		}
+		System.out.println("Won " + getWonGames() + "% of the last " + WIN_GAME_COUNTER + " games.");
 		return false;
 	}
 	
@@ -296,7 +310,21 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	 * debugging output
 	 */
 	private void debugOut(String msg, State newState, State oldState, Action newAction, Action oldAction, double reward){
-		System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
-				+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
+//		System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
+//				+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
+	}
+	
+	/**
+	 * @return Returns the percentage of won games of the last 50 games
+	 */
+	private static double getWonGames() {
+		int cnt = 0;
+		for(Boolean i : wins) {
+			if(i){
+				cnt++;
+			}
+		}
+		return ((double)cnt)/WIN_GAME_COUNTER;
+		
 	}
 }

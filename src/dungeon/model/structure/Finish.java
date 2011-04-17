@@ -94,7 +94,7 @@ public class Finish extends Tile implements Persistent
 			if (fLevelChange == 0)
 			{
 				// Won the game
-				App.finishGame(true);
+				//App.finishGame(true);
 			}
 			else
 			{
