@@ -1,7 +1,6 @@
 package dungeon.ai.assessment1;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
@@ -45,16 +44,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	/** health points of fCreature last tick */
 	private double oldHealth;
 	
-	/** vector to count how many of the last 50games have been won */
-	private final static int WIN_LOSE_RANGE = 50;
-	private static ArrayList<Boolean> won = null;
-	private static int count = 0;	
-	
 	public Assessment1Behaviour(Creature creature) {
 		super(creature);
 		fCreature = creature;
 		oldHealth = fCreature.getCurrentHealth();
 		stuckPos = fCreature.getLocation();
+		WinCounter.init();
 	}
 	
 	/**
@@ -68,7 +63,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 			oldState = new State(game, fCreature);
 			// initialise QTable
 			Qtable.initializeValues(game);
-			initWonArray();
+			
 		}		
 		// get new state
 		newState = new State(game, fCreature);		
@@ -214,6 +209,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 
 	public boolean deathTick(Game game) {
 		Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
+		WinCounter.setWinLos(false);
 		return false;
 	}
 
@@ -223,12 +219,12 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	public boolean gameOverTick(Game game) {
 		if (fCreature.getCurrentHealth() > 0) {
 			Qtable.updateTable(REWARD_REACH_EXIT, oldState, newState, oldAction);
-			setWinLos(true);
+			WinCounter.setWinLos(true);
 		} else {
 			Qtable.updateTable(PENALTY_DIED, oldState, newState, oldAction);
-			setWinLos(false);
+			WinCounter.setWinLos(false);
 		}
-		System.out.println("Percentage of won games our of last " + WIN_LOSE_RANGE + " games = " + getPercentageWon() + "%");
+		WinCounter.out();
 		return false;
 	}
 	
@@ -307,42 +303,5 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private void debugOut(String msg, State newState, State oldState, Action newAction, Action oldAction, double reward){
 		System.out.println("# " + msg + " :  [old State = " + oldState.getIndex() + "]  [new State = " 
 				+ newState.getIndex() +  "]  [old Action = " + oldAction + "] [new Action = " + newAction + "] [reward = " + reward + "]");
-	}
-	
-	/**
-	 * init the array to calc percentage of won games. 
-	 */
-	private static void initWonArray() {
-		if( won == null) {
-			new ArrayList<Boolean>(WIN_LOSE_RANGE);
-			for(int i=0;i<won.size();i++) {
-				won.set(i, false);
-			}
-		}		
-	}
-	
-	/**
-	 * Store if last game was won or lost. 
-	 * @param winLose false for lost, true for won.
-	 */
-	private static void setWinLos(boolean winLose) {
-		won.set(count, winLose);
-		count++;
-		count%=WIN_LOSE_RANGE;
-	}
-	
-	/**
-	 * @return Returns the percentage of the won games out of the last WIN_LOSE_RANGE games.
-	 */
-	private static double getPercentageWon() {
-		int cnt = 0;
-		for(int i=0;i<won.size();i++) {
-			if (won.get(i)) {
-				cnt++;
-			}
-		}
-		return ((double)cnt)/WIN_LOSE_RANGE;
-	}
-	
-	
+	}	
 }
