@@ -21,23 +21,36 @@
 
 \newpage
 
-\section{Scenario}
-In our scenario there is one fast ogre (let's call him John) in fraction ``blue`` and a variable number of slower creatures in fraction ''yellow``. The primary goal of the fast ogre is to escape from the dungeon by reaching the exit. For this it is not necessary to kill all the enemies however it might become necessary to fight against some of them as they block the way out.\par
-The normal weapon used by John is the longbow, as this allows him to attack without being attacked himself. In addition he can decide to pickup use potions to regain health or energy.
 
-\section{Reinforcement Learning}
-The learning techniques we decided to employ is reinforcement learning. 
+\section{Introduction}
+This paper describes the project implemented for the first assessment of the Artificial Intelligence For Computer Games course.
+
+Our project is based on reinforced learning, a machine learning technique, which we used to implement the artificial intelligence for the dungeon game used in the lecture.
+
+Our main achievements are the implementation of a generic reinforcement learner which allows to separate the learning process from the specific scenario and the design of a flexible configuration functionality, which enables users to pass parameters to the dungeon.
+
+The project includes a new scenario, which is described in section~\ref{sec:scenario}. Sections~\ref{sec:implementation} and \ref{sec:rl} deal with the implementation and section\ref{sec:instructions} explains how to run our scenario.
+ 
+\section{Scenario}\label{sec:scenario}
+In our scenario there is one fast ogre (let's call him John) in fraction ``blue`` and a variable number of slower creatures in fraction ''yellow``. The primary goal of the fast ogre is to escape from the dungeon by reaching the exit. For this it is not necessary to kill all the enemies however it might become necessary to fight against some of them as they block the way out.
+
+The normal weapon used by John is the longbow, as this allows him to attack without being attacked himself. In addition he can decide to pickup and use potions to regain health or energy.
+
+\section{Reinforcement Learning}\label{sec:rl}
+The learning techniques we decided to employ is reinforcement learning. Reinforced learning allows actors to learn what actions to take when being in a certain state based on rewards or penalties he got earlier on.
+
+% TODO: why
 
 \subsection{States}
-We use the following state variables, all of which are devided into 5 equidistant intervals:
+We use the following state variables, all of which are divided into 5 equidistant intervals:
 \begin{itemize}
- \item health points of Tom
- \item energy points of Tom
- \item distance between Tom and closest enemy
+ \item health points of John
+ \item energy points of John
+ \item distance between John and closest enemy
 \end{itemize}
 
 \subsection{Actions}
-Tom can take the following actions:
+John can take the following actions:
 \begin{itemize}
  \item attack closest enemy
  \item evade close enemies
@@ -46,62 +59,112 @@ Tom can take the following actions:
  \item get and use closest energy potion
 \end{itemize}
 
-''closest`` in this context means absolut distance and ''not distance to walk``. \par
+''closest`` in this context means absolute distance and ''not distance to walk``.
 
-''evade close enemies`` lets Tom move directly away from the geometric center of all enemies that are within a certain radius from Tom.
+''evade close enemies`` lets John move directly away from the geometric center of all enemies that are within a certain radius from John.
 
 \subsection{Rewards}
 Tm gets the following rewards or penalties
 \begin{center}
-\begin{tabular}{ll}
+\begin{tabular}{l|l}
+Action & Reward \\
+\hline
 reached exit & +10 \\
 died & -10 \\
 hit enemy & +3 \\
 got hit by enemy & -3 \\
 kill enemy & +5 \\
-used potion & depending on how much energy/health Tom regained doing this \\
-changed state without achieving anything of the above & 0
+used potion & variable\\
+changed state & 0
 \end{tabular}
 \end{center}
 
-\subsection{Implementation}
-We implemented the reinforcement learning in a rather generic way. \par
+\minisec{''reached exit`` and ``died''Rewards}
+Reaching the exit and dying are the two ends of the spectrum, so John gets the biggest reward/penalty respectively.
+
+\minisec{''hit enemy`` and ``got hit by enemy'' Rewards}
+Killing all the monsters is not the main objective, so John only gets a small reward for hitting any enemies.
+
+\minisec{''used potion`` Rewards}
+The reward John gets for picking up an health potion depends on his current health. He gets the most points when his health level is low. As getting to the exit is the goal of the game, he gets a slight penalty when he picks up a potion although he's health level is good and he wouldn't need one. 
+For health levels in between he gets a gradual amount of reward. 
+With this reward system, we want to train John to pick up health potions when he needs them in order to win the game.
+ 
+The same rules apply also for energy potions. 
+
+\minisec{''changed state`` Rewards}
+When John changes state but doesn't achieve anything listed above, he doesn't get any reward or penalty. 
+
+
+\section{Implementation}\label{sec:implementation}
+\subsection{Reinforcement Learner}
+% We implemented the reinforcement learning in a rather generic way.
+% % This is our main achievement! TODO: rephrase?
+Our implementation allows to separate the Q-Learner completely from the specific scenario. It is up to the client to define what attribute a state constitutes and what actions an actor can take, which makes our Q-Learner reusable and generic. 
 
 \paragraph{Qtable.java}
-This class holds a Q-table to be used in reinforcement learning. As long as Action.java and State.java provide all necessary methods Q-Table is entirely independent on the actual actions or states. It provides a number of methods to update the qtable and retrieve actions: \par
+This class holds a Q-table to be used in reinforcement learning. As long as \verb|Action.java| and \verb|State.java| provide all necessary methods Q-Table is entirely independent on the actual actions or states. It provides a number of methods to update the qtable and retrieve actions:
+
 \begin{itemize}
- \item \textit{static void updateTable (double reward, State oldState, State newState, Action oldAction)} updates the Q-table using the given parameters, i.e. in our case the previous state John was in, the current state John is in, the action that led to this state and the reward that is to be assigned for this.
- \item \textit{static Action getRandomAction()} returns a random action, i.e. on of those defined in Action.java.
- \item \textit{static Action getGreedyAction(State state)} returns to  greediness \% the best, otherwise a random action.
+ \item \verb|static void updateTable (double reward, State oldState,|\\
+  \verb|State newState, Action oldAction)| updates the Q-table using the given parameters, i.e. in our case the previous state John was in, the current state John is in, the action that led to this state and the reward that is to be assigned for this.
+ \item \verb|static Action getRandomAction()| returns a random action, i.e. on of those defined in Action.java.
+ \item \verb|static Action getGreedyAction(State state)| returns to  greediness \% the best, otherwise a random action.
 \end{itemize}
 
 \paragraph{Action.java}
-Action.java is a enumeration of all actions that can be taken. See the source code for a description of the methods. \par
+\verb|Action.java| is a enumeration of all actions that can be taken. See the source code for a description of the methods.
 
-To add a new action, add the name of that action to the enumeration and assign a reward for this action in \textit{double getReward()}. Also add the actual action in your \textit{doAction(Action action)} method in your behaviour class.
+To add a new action, add the name of that action to the enumeration and assign a reward for this action in \verb|double getReward()|. Also add the actual action in your \verb|doAction(Action action)| method in your behaviour class.
 
 \paragraph{State.java}
-State.java handles the different states needed for reinforcement learning. It provides a number of public methods:
+\verb|State.java| handles the different states needed for reinforcement learning. It provides a number of public methods:
 \begin{itemize}
- \item \textit{boolean hasNotChanged(State state)} Returns true of this state and state share the same index.
- \item \textit{int getMaxIndex()} Returns the number of possible different indices.
- \item \textit{int getIndex()} Returns the index of this state, which is a number between (including) 0 and (excluding) getMaxIndex().
+ \item \verb|boolean hasNotChanged(State state)| Returns true of this state and state share the same index.
+ \item \verb|int getMaxIndex()| Returns the number of possible different indices.
+ \item \verb|int getIndex()| Returns the index of this state, which is a number between (including) 0 and (excluding) \verb|getMaxIndex()|.
 \end{itemize} 
 
-To change the states you only need to adapt the following:
+To change the states, you only need to adapt the following:
 \begin{itemize}
- \item update getMaxIndex() accordingly.
- \item update setIndex() accordingly.
+ \item update \verb|getMaxIndex()| accordingly.
+ \item update \verb|setIndex()| accordingly.
 \end{itemize}
 
-(currently the class has much more private variables. However, in fact there is no need (exept for debugging) to store them as only the index matters: reading them from the game, then calculating the index and forgetting about all state variables after this again would be perfectly fine.)
-
-\subsection{Graphs}
+(currently the class has much more private variables. However, in fact there is no need (except for debugging) to store them as only the index matters: reading them from the game, then calculating the index and forgetting about all state variables after this again would be perfectly fine.)
 
 
-\section{How to run the scenario}
+\subsubsection{Graphs}
 
-To run the scenario just run the game and load \textit{findExit.xml}. 
+\subsection{Configuration functionality}
+Our configuration functionality makes it possible for a scenario to have configuration options. The GUI provides a settings panel where the adjustable parameters are displayed and can be changed by the user during run time.
+
+\subsubsection{Usage}
+A scenario XML can have configuration options for at most one behaviour. In order to specify which settings should be loaded for a particular scenario, XMLs can include a \verb|Configurations| element. The \verb|type| attribute refers to the name of the configuration class that is to be used:
+\begin{verbatim}
+<Configurations Type="ReinforcementLearnerConfigurations"/>
+\end{verbatim}
+In this example, the dungeon GUI would display configurations as specified in the  \verb|ReinforcementLearnerConfigurations| class. These configuration classes have to be located in the \verb|dungeon.configurations| package.
+
+
+\subsubsection{Implementation}
+\minisec{dungeon.configurations}
+Every behaviour that is customizable needs to have a class in this package that implements the abstract \verb|Configurations| class.
+\begin{itemize}
+\item \verb|Configurations|: Each parameter in a configuration has a key. The parameters of a configuration can be retrieved as a \verb|HashMap|, where the key is used to access parameter values such as the default value, current value, min/max value possible etc. 
+\item \verb|ConfigurationHandler|: Loads configuration class as specified in the XML (type attribute of \verb|Configurations| element) with the help of Java reflection.
+\item \verb|ReinforcementLearnerConfigurations|: specific configurations for the reinforcement learning problem (initialization values for Q-Table, values to be used for Alpha/Discountfactor/Greediness)
+\end{itemize}
+
+\minisec{dungeon.ui}
+\begin{itemize}
+\item \verb|ParameterPanel|: GUI element for the settings menu. Lists the configuration options of the specific \verb|Configuration| class which is used in the game. Independent of the kind of settings used.
+\item \verb|DungeonForm|: passes  the configuration entered by the user to the game class every time the game is restarted. Displays the configuration option as spinners if the current scenario has any.
+\end{itemize}
+
+
+\section{How to run the scenario}\label{sec:instructions}
+To run the scenario, start the game and load the \textit{findExit.xml} file. Change any configuration values if needed and click on start.  
 
 
 

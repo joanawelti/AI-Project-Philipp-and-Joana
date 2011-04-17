@@ -78,7 +78,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		}		
 
 
-		// check is state changed
+		// check if state changed
 		if( !oldState.hasNotChanged(newState) ) {						
 			// Update Q-table
 			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);

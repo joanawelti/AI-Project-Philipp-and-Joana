@@ -23,30 +23,31 @@
 
 
 \section{Introduction}
-This paper describes the project implemented for the first assessment of the Artificial Intelligence For Computer Games course.
+This paper describes the project implemented for the first assessment of the Artificial Intelligence For Computer Games course. 
 
-Our project is based on reinforced learning, a machine learning technique, which we used to implement the artificial intelligence for the dungeon game used in the lecture.
+Our project is based on reinforced learning, a machine learning technique, which we used to implement the artificial intelligence for the dungeon game used in the lecture. 
 
-Our main achievements are the implementation of a generic reinforcement learner which allows to separate the learning process from the specific scenario and the design of a flexible configuration functionality, which enables users to pass parameters to the dungeon.
+Our main achievements are the implementation of a generic reinforcement learner which allows to separate the learning process from the specific scenario and the design of a flexible configuration functionality, which enables users to pass parameters to the dungeon. 
 
-The project includes a new scenario, which is described in section~\ref{sec:scenario}. Sections~\ref{sec:implementation} and \ref{sec:rl} deal with the implementation and section\ref{sec:instructions} explains how to run our scenario.
+The project includes a new scenario, which is described in section~\ref{sec:scenario}. Sections~\ref{sec:implementation} and \ref{sec:rl} deal with the implementation and section\ref{sec:instructions} explains how to run our scenario. 
  
 \section{Scenario}\label{sec:scenario}
-In our scenario there is one fast ogre (let's call him John) in fraction ``blue`` and a variable number of slower creatures in fraction ''yellow``. The primary goal of the fast ogre is to escape from the dungeon by reaching the exit. For this it is not necessary to kill all the enemies however it might become necessary to fight against some of them as they block the way out.
+In our scenario there is one fast ogre (let's call him John) in fraction ``blue`` and a variable number of slower creatures in fraction ''yellow``. The primary goal of John is to escape from the dungeon by reaching the exit. For this it is not necessary to kill all the enemies however it might become necessary to fight against some of them as they block the way out. 
 
 The normal weapon used by John is the longbow, as this allows him to attack without being attacked himself. In addition he can decide to pickup and use potions to regain health or energy.
 
 \section{Reinforcement Learning}\label{sec:rl}
-The learning techniques we decided to employ is reinforcement learning. Reinforced learning allows actors to learn what actions to take when being in a certain state based on rewards or penalties he got earlier on.
+The learning techniques we decided to employ is reinforcement learning. Reinforced learning allows actors to learn what actions to take when being in a certain state based on rewards or penalties they got earlier on.
 
 % TODO: why
 
 \subsection{States}
-We use the following state variables, all of which are divided into 5 equidistant intervals:
+We use the following state variables:
 \begin{itemize}
- \item health points of John
- \item energy points of John
- \item distance between John and closest enemy
+ \item health points of John - divided in 3 equidistant intervals.
+ \item energy points of John - divided in 3 equidistant intervals.
+ \item distance between John and closest enemy  - divided in 5 equidistant intervals.
+ \item distance between John and the exit - divided in 5 equidistant intervals.
 \end{itemize}
 
 \subsection{Actions}
