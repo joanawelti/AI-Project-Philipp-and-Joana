@@ -1,5 +1,7 @@
 package dungeon.ai.assessment1;
 
+import java.awt.geom.Point2D;
+
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 
@@ -32,8 +34,8 @@ public class State {
 	private int distanceToGoalIndex;
 	
 	/* constant to define in how many section an interval is divided */
-	public static final int ENERGY_SECTION_CNT = 5;
-	public static final int HEALTH_SECTION_CNT = 5;
+	public static final int ENERGY_SECTION_CNT = 3;
+	public static final int HEALTH_SECTION_CNT = 3;
 	public static final int DISTANCE_ENEMY_SECTION_CNT = 5;
 	public static final int DISTANCE_GOAL_SECTION_CNT = 5;
 	
@@ -48,6 +50,8 @@ public class State {
 		setHealth( (double) fCreature.getCurrentHealth() );
 		setEnergy( (double) fCreature.getCurrentEnergy() );
 		setDistanceToEnemy(getMinimumDistanceToEnemy(game, fCreature) );
+		Point2D finish = dungeon.model.structure.LocationHelper.getFinishCenter(game.getMap());
+		setDistanceToGoal(finish.distance(fCreature.getLocation()));		
 		
 		// get interval lengths
 		energyInterval = fCreature.getMaxEnergy() / ENERGY_SECTION_CNT;
@@ -74,7 +78,6 @@ public class State {
 	 */
 	public static int getMaxIndex() {
 		return ENERGY_SECTION_CNT * HEALTH_SECTION_CNT * DISTANCE_ENEMY_SECTION_CNT * DISTANCE_GOAL_SECTION_CNT;
-		//return ENERGY_SECTION_CNT * DISTANCE_ENEMY_SECTION_CNT;
 	}
 	
 	/**

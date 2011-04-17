@@ -1,18 +1,20 @@
 package dungeon.ai.assessment1;
 
+import java.awt.geom.Point2D;
+
 import dungeon.ai.BehaviourWithPathfindingAStar;
 import dungeon.ai.actions.ActionAttack;
 import dungeon.ai.actions.ActionPickUp;
 import dungeon.model.Game;
 import dungeon.model.items.mobs.Creature;
 import dungeon.model.items.treasure.Potion;
-import dungeon.model.items.treasure.Treasure;
 import dungeon.model.structure.LocationHelper;
 
 
 public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {	
 	/** Constants */ 
-	private final int MAXTICKS = 200;	
+	private final int MAXTICKS = 50;	
+	private final int STUCK_RADIUS = 25;
 	
 	private final static int PENALTY_STUCK = -1;
 	private final static int PENALTY_DIED = -10;
@@ -34,21 +36,20 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	
 	/** ticks to avoid getting stuck */
 	private int ticks = 0; 	
+	private Point2D stuckPos;
 	
 	/** creature to do AI for */
 	private Creature fCreature;
 	
 	/** health points of fCreature last tick */
 	private double oldHealth;
-	
-//	/** the Q-table to use */
-//	private Qtable learner = new Qtable();
 
 	
 	public Assessment1Behaviour(Creature creature) {
 		super(creature);
 		fCreature = creature;
 		oldHealth = fCreature.getCurrentHealth();
+		stuckPos = fCreature.getLocation();
 	}
 	
 	/**
@@ -66,28 +67,50 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		// get new state
 		newState = new State(game, fCreature);		
 		
-		// check if state changed
-		if( oldState.hasNotChanged(newState) ){
-			ticks += 1;
-			if (ticks > MAXTICKS) {
-				// get next action
-				newAction = Qtable.getGreedyAction(newState, game);
-				//newAction = Qtable.getRandomAction();
-				
-				// and give penalty because creature was stuck
-				Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
-				ticks = 0;
-			}						
-		} else {						
+		// check if stuck
+		if( isStuck() ){			
+			// get next action
+			newAction = Qtable.getGreedyAction(newState, game);
+			//newAction = Qtable.getRandomAction();
+
+			// and give penalty because creature was stuck
+			Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
+		}		
+
+
+		// check is state changed
+		if( !oldState.hasNotChanged(newState) ) {						
 			// Update Q-table
 			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);
-			
+
 			// get appropriate action
 			newAction = Qtable.getGreedyAction(newState, game);
-			
+
 			oldState = newState;
 			ticks = 0;
-		}	
+		}
+
+		//		if( oldState.hasNotChanged(newState) ){
+//			ticks += 1;
+//			if (ticks > MAXTICKS) {
+//				// get next action
+//				newAction = Qtable.getGreedyAction(newState, game);
+//				//newAction = Qtable.getRandomAction();
+//				
+//				// and give penalty because creature was stuck
+//				Qtable.updateTable(PENALTY_STUCK, oldState, newState, oldAction);
+//				ticks = 0;
+//			}						
+//		} else {						
+//			// Update Q-table
+//			Qtable.updateTable(oldAction.getReward(), oldState, newState, oldAction);
+//			
+//			// get appropriate action
+//			newAction = Qtable.getGreedyAction(newState, game);
+//			
+//			oldState = newState;
+//			ticks = 0;
+//		}	
 		
 		// if action changed
 		if (newAction != oldAction) {
@@ -263,5 +286,22 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (potion != null) {
 			fCreature.consume(potion);
 		}
+	}
+	
+	/**
+	 * The creature defined to be stuck if it didn't move more than STUCK_RADIUS for 
+	 * the last MAXTICKS ticks.
+	 * @return Returns true if creature seems to be stuck; false else.
+	 */
+	private boolean isStuck() {
+		if (ticks > MAXTICKS && stuckPos.distance(fCreature.getLocation()) < STUCK_RADIUS) {
+			ticks = 0;
+			stuckPos = fCreature.getLocation();
+
+			return true;
+		} else {
+			ticks++;
+			return false;
+		}		
 	}
 }
