@@ -63,7 +63,7 @@ public class Qtable {
 	 */
 	private static void init() {
 		qtable = new double[State.getMaxIndex()][Action.getNumberOfActions()];
-		//System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
+		System.out.println("state max index = " + State.getMaxIndex() + " -- Action max index = " + Action.getNumberOfActions());
 		for(int i=0;i<qtable.length;i++) {
 			for(int j=0;j<qtable[0].length;j++) {
 				qtable[i][j] = init_value;

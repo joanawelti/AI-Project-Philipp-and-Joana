@@ -16,7 +16,7 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 	private final int MAXTICKS = 50;	
 	private final int STUCK_RADIUS = 25;
 	
-	private final static int PENALTY_STUCK = -1;
+	private final static int PENALTY_STUCK = -2;
 	private final static int PENALTY_DIED = -10;
 	private final static int PENALTY_HIT_ENEMY = -3;
 	
@@ -297,7 +297,6 @@ public class Assessment1Behaviour extends BehaviourWithPathfindingAStar {
 		if (ticks > MAXTICKS && stuckPos.distance(fCreature.getLocation()) < STUCK_RADIUS) {
 			ticks = 0;
 			stuckPos = fCreature.getLocation();
-
 			return true;
 		} else {
 			ticks++;
