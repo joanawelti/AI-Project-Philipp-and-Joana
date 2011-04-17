@@ -25,11 +25,11 @@
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
       </Ogre>
-	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="60" Y="10" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="60" Y="50" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
       </Ogre>
-	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="10" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
+	  <Ogre CurrentEnergy="100" CurrentHealth="100" Gold="10" X="40" Y="5" Behaviour="dungeon.ai.AttackInSight"  Faction="yellow">
         <Attacks><Vector><Smash/></Vector></Attacks>
         <Inventory><Vector/></Inventory>
       </Ogre>
@@ -40,9 +40,13 @@
 		<!-- health -->
 		<Potion Type="0" X="3" Y="5"/>
 		<Potion Type="0" X="20" Y="80"/>
+		<Potion Type="0" X="20" Y="80"/>
+		<Potion Type="0" X="60" Y="60"/>
 		<!-- energy -->
-		<Potion Type="1" X="15" Y="40"/>
+		<Potion Type="1" X="10" Y="50"/>
 		<Potion Type="1" X="50" Y="90"/>
+		<Potion Type="1" X="75" Y="10"/>
+		
 	</Vector>
   </Treasure>
   <!--Hero CurrentEnergy="100" CurrentHealth="100" Gold="0" X="40" Y="40">
